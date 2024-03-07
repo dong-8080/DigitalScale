@@ -1,0 +1,88 @@
+{
+	"pages":[
+		{
+			"paper_type": "MMSE",
+			"paper_id": 53476,
+			"center_points":[
+				{"id":"1-1", "type":"score", "event":"", "x":1800, "y":285, "width": 100, "description":"M1-1 score 0"},
+				{"id":"1-1", "type":"score", "event":"", "x":1960, "y":285, "width": 100, "description":"M1-1 score 1"},
+				{"id":"1-2", "type":"score", "event":"", "x":1800, "y":380, "width": 100, "description":"M1-2 score 0"},
+				{"id":"1-2", "type":"score", "event":"", "x":1960, "y":380, "width": 100, "description":"M1-2 score 1"},
+				{"id":"1-3", "type":"score", "event":"", "x":1800, "y":475, "width": 100, "description":"M1-3 score 0"},
+				{"id":"1-3", "type":"score", "event":"", "x":1960, "y":475, "width": 100, "description":"M1-3 score 1"},
+				{"id":"1-4", "type":"score", "event":"", "x":1800, "y":565, "width": 100, "description":"M1-4 score 0"},
+				{"id":"1-4", "type":"score", "event":"", "x":1960, "y":565, "width": 100, "description":"M1-4 score 1"},
+				{"id":"1-5", "type":"score", "event":"", "x":1800, "y":660, "width": 100, "description":"M1-5 score 0"},
+				{"id":"1-5", "type":"score", "event":"", "x":1960, "y":660, "width": 100, "description":"M1-5 score 1"},
+				
+				{"id":"2-1", "type":"score", "event":"", "x":1800, "y":850, "width": 100, "description":"M2-1 score 0"},
+				{"id":"2-1", "type":"score", "event":"", "x":1960, "y":850, "width": 100, "description":"M2-1 score 1"},
+				{"id":"2-2", "type":"score", "event":"", "x":1800, "y":940, "width": 100, "description":"M2-2 score 0"},
+				{"id":"2-2", "type":"score", "event":"", "x":1960, "y":940, "width": 100, "description":"M2-2 score 1"},
+				{"id":"2-3", "type":"score", "event":"", "x":1800, "y":1035, "width": 100, "description":"M2-3 score 0"},
+				{"id":"2-3", "type":"score", "event":"", "x":1960, "y":1035, "width": 100, "description":"M2-3 score 1"},
+				{"id":"2-4", "type":"score", "event":"", "x":1800, "y":1130, "width": 100, "description":"M2-4 score 0"},
+				{"id":"2-4", "type":"score", "event":"", "x":1960, "y":1130, "width": 100, "description":"M2-4 score 1"},
+				{"id":"2-5", "type":"score", "event":"", "x":1800, "y":1220, "width": 100, "description":"M2-5 score 0"},
+				{"id":"2-5", "type":"score", "event":"", "x":1960, "y":1220, "width": 100, "description":"M2-5 score 1"},
+				
+				{"id":"3-1", "type":"score", "event":"", "x":1800, "y":1480, "width": 100, "description":"M3-1 score 0"},
+				{"id":"3-1", "type":"score", "event":"", "x":1960, "y":1480, "width": 100, "description":"M3-1 score 1"},
+				{"id":"3-2", "type":"score", "event":"", "x":1800, "y":1570, "width": 100, "description":"M3-2 score 0"},
+				{"id":"3-2", "type":"score", "event":"", "x":1960, "y":1570, "width": 100, "description":"M3-2 score 1"},
+				{"id":"3-3", "type":"score", "event":"", "x":1800, "y":1665, "width": 100, "description":"M3-3 score 0"},
+				{"id":"3-3", "type":"score", "event":"", "x":1960, "y":1665, "width": 100, "description":"M3-3 score 1"},
+				
+				{"id":"4-1", "type":"score", "event":"", "x":1800, "y":2160, "width": 100, "description":"M4-1 score 0"},
+				{"id":"4-1", "type":"score", "event":"", "x":1960, "y":2160, "width": 100, "description":"M4-1 score 1"},
+				{"id":"4-2", "type":"score", "event":"", "x":1800, "y":2255, "width": 100, "description":"M4-2 score 0"},
+				{"id":"4-2", "type":"score", "event":"", "x":1960, "y":2255, "width": 100, "description":"M4-2 score 1"},
+				{"id":"4-3", "type":"score", "event":"", "x":1800, "y":2345, "width": 100, "description":"M4-3 score 0"},
+				{"id":"4-3", "type":"score", "event":"", "x":1960, "y":2345, "width": 100, "description":"M4-3 score 1"},
+				{"id":"4-4", "type":"score", "event":"", "x":1800, "y":2440, "width": 100, "description":"M4-4 score 0"},
+				{"id":"4-4", "type":"score", "event":"", "x":1960, "y":2440, "width": 100, "description":"M4-4 score 1"},
+				{"id":"4-5", "type":"score", "event":"", "x":1800, "y":2530, "width": 100, "description":"M4-5 score 0"},
+				{"id":"4-5", "type":"score", "event":"", "x":1960, "y":2530, "width": 100, "description":"M4-5 score 1"},
+				
+				{"id":"5-1", "type":"score", "event":"", "x":1800, "y":2720, "width": 100, "description":"M5-1 score 0"},
+				{"id":"5-1", "type":"score", "event":"", "x":1960, "y":2720, "width": 100, "description":"M5-1 score 1"},
+				{"id":"5-2", "type":"score", "event":"", "x":1800, "y":2810, "width": 100, "description":"M5-2 score 0"},
+				{"id":"5-2", "type":"score", "event":"", "x":1960, "y":2810, "width": 100, "description":"M5-2 score 1"},
+				{"id":"5-3", "type":"score", "event":"", "x":1800, "y":2905, "width": 100, "description":"M5-3 score 0"},
+				{"id":"5-3", "type":"score", "event":"", "x":1960, "y":2905, "width": 100, "description":"M5-3 score 1"},
+				
+			]
+		},{
+			"paper_type": "MMSE",
+			"paper_id": 53477,
+			"center_points":[
+				{"id":"6-1", "type":"score", "event":"", "x":1800, "y":280, "width": 100, "description":"M6-1 score 0"},
+				{"id":"6-1", "type":"score", "event":"", "x":1960, "y":280, "width": 100, "description":"M6-1 score 1"},
+				
+				{"id":"7-1", "type":"score", "event":"", "x":1800, "y":540, "width": 100, "description":"M7-1 score 0"},
+				{"id":"7-1", "type":"score", "event":"", "x":1960, "y":540, "width": 100, "description":"M7-1 score 1"},		
+
+				{"id":"8-1", "type":"score", "event":"", "x":1800, "y":865, "width": 100, "description":"M8-1 score 0"},
+				{"id":"8-1", "type":"score", "event":"", "x":1960, "y":865, "width": 100, "description":"M8-1 score 1"},
+				{"id":"8-2", "type":"score", "event":"", "x":1800, "y":960, "width": 100, "description":"M8-2 score 0"},
+				{"id":"8-2", "type":"score", "event":"", "x":1960, "y":960, "width": 100, "description":"M8-2 score 1"},
+				{"id":"8-3", "type":"score", "event":"", "x":1800, "y":1050, "width": 100, "description":"M8-3 score 0"},
+				{"id":"8-3", "type":"score", "event":"", "x":1960, "y":1050, "width": 100, "description":"M8-3 score 1"},
+				
+				{"id":"9-1", "type":"score", "event":"", "x":1800, "y":1335, "width": 100, "description":"M9-1 score 0"},
+				{"id":"9-1", "type":"score", "event":"", "x":1960, "y":1335, "width": 100, "description":"M9-1 score 1"},
+				
+				{"id":"10-1", "type":"score", "event":"", "x":1800, "y":1660, "width": 100, "description":"M10-1 score 0"},
+				{"id":"10-1", "type":"score", "event":"", "x":1960, "y":1660, "width": 100, "description":"M10-1 score 1"},
+
+				{"id":"11-1", "type":"score", "event":"", "x":1800, "y":1885, "width": 100, "description":"M11-1 score 0"},
+				{"id":"11-1", "type":"score", "event":"", "x":1960, "y":1885, "width": 100, "description":"M11-1 score 1"},
+				
+				{"id":"11-2", "type":"draw", "event":"", "x":1485, "y":2335, "width": 1200, "description":"draw a pentagon"},
+				
+				{"id":"12", "type":"score", "event":"", "x":1270, "y":2815, "width": 200, "description":"MMSE total score"},
+
+			]
+		}
+	]
+}

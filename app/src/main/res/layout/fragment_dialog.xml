@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="8dp"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+
+        android:id="@+id/linear_layout1"
+        android:layout_width="550dp"
+        android:layout_height="900dp"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:foreground="?attr/selectableItemBackground">
+
+
+        <TextView
+            android:layout_marginTop="100dp"
+            android:layout_width="wrap_content"
+            android:text="阿尔茨海默病笔迹采集"
+            android:layout_gravity="center"
+            android:textSize="54sp"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:layout_marginTop="20dp"
+            android:id="@+id/imageViewBrain"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/cover"
+            />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_marginTop="200dp"
+            app:cornerRadius="15dp"
+            android:id="@+id/buttonStartTest"
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:textSize="28sp"
+            android:text="开始测试"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout2"
+        android:layout_width="550dp"
+        android:layout_height="900dp"
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:text="被试信息填写"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="20dp"
+            android:textSize="54sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!-- 第二个 Fragment 的内容 -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="姓名">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--可以实现下拉，更换style之类的信息-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="性别">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/brith"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="出生日期">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/education"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="教育程度">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/history"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_weight="1"
+        android:hint="既往病史">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_marginTop="200dp"
+        app:cornerRadius="15dp"
+        android:id="@+id/button2"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:textSize="28sp"
+        android:text="确认填写"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout3"
+        android:orientation="vertical"
+        android:layout_width="550dp"
+        android:layout_height="900dp"
+        android:layout_margin="16dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:visibility="gone">
+
+        <TextView
+            android:text="蓝牙笔连接配置"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="20dp"
+            android:textSize="54sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="扫描到以下蓝牙设备，请选择蓝牙笔连接"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:layout_gravity="center_vertical"
+                android:paddingBottom="20dp"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.button.MaterialButton
+                app:cornerRadius="15dp"
+                android:id="@+id/button_scan"
+                android:layout_marginLeft="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="重新扫描"/>
+
+
+        </LinearLayout>
+
+
+
+        <!--一个循环列表，标识扫描的蓝牙笔-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <!--没找到蓝牙笔的mac地址需要手动填写-->
+<!--        <TextView-->
+<!--            android:text="未找到蓝牙笔，手动连接"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:paddingBottom="20dp"-->
+<!--            android:textSize="24sp"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"/>-->
+
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_marginTop="200dp"
+            app:cornerRadius="15dp"
+            android:id="@+id/button3"
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:textSize="28sp"
+            android:text="确认填写"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
