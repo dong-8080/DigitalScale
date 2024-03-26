@@ -4,10 +4,22 @@
     <item
         android:id="@+id/clear"
         android:icon="@drawable/ic_clear"
+        android:title="@string/clear"
         app:showAsAction="ifRoom"/>
+
 
     <item
         android:id="@+id/submit"
         android:icon="@drawable/ic_submit"
+        android:title="@string/submit"
         app:showAsAction="ifRoom" />
+
+
+    <item
+        android:id="@+id/undoButton"
+        android:icon="@drawable/ic_withdraw_gray"
+        android:title="@string/withdraw"
+        app:showAsAction="ifRoom" />
+
+
 </menu>

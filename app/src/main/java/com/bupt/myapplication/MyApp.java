@@ -5,6 +5,7 @@ import android.app.Application;
 import java.util.List;
 
 // 上个项目抄来的，忘记有没有叼用了
+// 目测是没用的（？。。
 public class MyApp extends Application {
     private static MyApp instance;
 

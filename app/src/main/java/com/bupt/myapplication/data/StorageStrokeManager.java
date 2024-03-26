@@ -18,6 +18,8 @@ public class StorageStrokeManager {
     private static StorageStrokeManager instance;
     // 以pageID-gridID-List<List<PointData>>存储的有效笔迹数据
     // 老母猪xxx一套又一套，就是得套起来不然太乱了
+
+    //唯一实例化
     private List<StorageStroke> storageStrokeList = new ArrayList<>();
 
     public static synchronized StorageStrokeManager getInstance() {
@@ -28,6 +30,7 @@ public class StorageStrokeManager {
     }
 
     // 读取对应页面的数据点，并找到对应的gridID
+    //就是判断一段笔迹属于哪个格子
     private String generateGridID(String pageID, List<PointData> stroke){
         // 获取笔迹的中心点坐标
         float center_x = 0;
@@ -60,6 +63,7 @@ public class StorageStrokeManager {
         }
     }
 
+    //找到与中心点距离最近的格子
     public CenterPoint getRelatedPoint(float x, float y, List<CenterPoint> centerPoints){
         if (centerPoints==null||centerPoints.isEmpty()){
             return null;

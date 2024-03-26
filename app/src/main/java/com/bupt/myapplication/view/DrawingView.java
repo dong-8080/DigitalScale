@@ -1,6 +1,7 @@
 package com.bupt.myapplication.view;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -172,6 +173,8 @@ public class DrawingView extends View implements Serializable {
         }
     }
 
+    //TODO：撤回一段笔迹之后要重新画当前页面所有
+
     // 切换页面后, 再次初始化, 将之前保存的数据绘制出来
     void drawHistoryStroke(String pageID) {
         List<PointData> pointScreenList = PointManager.getInstance().getCurrentPointScreenList(pageID);
@@ -235,6 +238,63 @@ public class DrawingView extends View implements Serializable {
                 }
             }
         }
+    }
+    //擦除工具
+    public void notifyErase() {
+        List<PointData> tmpList = PointManager.getInstance().getPointEraseList();
+        Log.d("success", "tmpList"+tmpList);
+        while (tmpList.size() > 0) {
+            PointData pdata = tmpList.get(0);
+
+            if (pdata == null || pdata.isStroke_end()) {
+                Log.d("onDraw ", "drawData 笔画结束 ");
+                try {
+                    tmpList.remove(0);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            } else {
+                // 正常擦除，这里应该判断下纸是是否匹配的
+                // Demo中只需要在正16K纸上进行测试即可
+                // 前辈写的代码没一句是废的
+                try {
+                    tmpList.remove(0);
+                } catch (Exception e) {
+                    Log.e("TAG", "IndexOutOfBoundsException");
+                }
+
+
+                if (lastPoint == null || pdata.isStroke_start() == true) {
+                    lastPoint = pdata;
+                }
+
+                float xStart = page_width_forscreen * (pdata.get_x()) / page_width;
+                float yStart = page_height_forscreen * (pdata.get_y()) / page_height;
+                float xEnd = page_width_forscreen * (lastPoint.get_x()) / page_width;
+                float yEnd = page_height_forscreen * (lastPoint.get_y()) / page_height;
+
+                Log.e("TAG", "factor" + page_height_forscreen/page_width);
+                Log.e("TAG", "xStart" + xStart+" ");
+
+                lastPoint = pdata;
+
+                // 设定橡皮擦大小
+                float ERASER_WIDTH_MIN = 10f;
+                float EraserWidthFactor = 2f;
+                float pwidth = 0;
+                float s_width = ERASER_WIDTH_MIN + EraserWidthFactor * pdata.getlinewidth() + pwidth;
+
+                // 设置橡皮擦颜色，这里设置为白色，可以根据需求修改
+                mDrawpaint.setColor(Color.WHITE);
+                mDrawpaint.setStrokeWidth(s_width);
+
+                // 擦除路径
+                mCanvas.drawLine(xStart, yStart, xEnd, yEnd, mDrawpaint);
+
+            }
+        }
+        invalidate();
+        PointManager.getInstance().EraseListClear();
     }
 
     // TODO: 演示使用模拟提交，使得字迹变化, 测试方法

@@ -95,7 +95,7 @@ public class BackgroundLoader {
             if (resourceId != 0) {
                 bitmap = BitmapFactory.decodeResource(this.context.getResources(), resourceId, options);
             } else {
-                bitmap = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.background_empty, options);
+                bitmap = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.drawing_background_empty, options);
             }
         }
         return bitmap;

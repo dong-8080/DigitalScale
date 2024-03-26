@@ -1,8 +1,12 @@
 package com.bupt.myapplication.data;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import com.bbb.bpen.model.PointData;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -18,10 +22,13 @@ public class PointManager {
     private static PointManager instance;
     private List<PointData> pointDrawList;
     private List<PointData> pointScreenList;
+    private List<PointData> tmpList;
+
 
     private PointManager() {
         this.pointDrawList = new CopyOnWriteArrayList<>();
         this.pointScreenList = new CopyOnWriteArrayList<>();
+        this.tmpList = new CopyOnWriteArrayList<>();
     }
 
     public static synchronized PointManager getInstance() {
@@ -35,6 +42,13 @@ public class PointManager {
         return pointDrawList;
     }
 
+    public List<PointData> getPointEraseList() {
+        return tmpList;
+    }
+
+    public void EraseListClear(){
+        tmpList.clear();
+    }
 
     public List<PointData> getAllPointScreenList() {
         return pointScreenList;
@@ -69,6 +83,9 @@ public class PointManager {
     // 是否包含绘图的数据点
     public boolean isContainDrawPoint() {
         return pointDrawList.size() > 0;
+    }
+    public boolean isContainErasePoint() {
+        return tmpList.size() > 0;
     }
 
     public boolean isContainCurrentDrawPoint(String paperId) {
@@ -115,5 +132,27 @@ public class PointManager {
     public void clear(){
         this.pointDrawList.clear();
         this.pointScreenList.clear();
+        this.tmpList.clear();
+    }
+
+    public void withdraw() {
+        if (pointScreenList.isEmpty()) {
+            return;
+        }
+        // 找到上一段笔迹的结束点
+        int endIndex = pointScreenList.size() - 1;
+        // 找到上一段笔迹的起始点
+        int startIndex = endIndex;
+        while (startIndex >= 0 && !pointScreenList.get(startIndex).isStroke_start()) {
+            startIndex--;
+        }
+        Log.d("MainActivity", "startIndex: " + startIndex + ", endIndex: " + endIndex);
+        // 删除起始点和结束点之间的所有点
+        for (int i = 0; i < endIndex-startIndex+1; i++) {
+            PointData tmp=pointScreenList.remove(startIndex);
+            if (tmp != null) {
+                tmpList.add(tmp);
+            }
+        }
     }
 }

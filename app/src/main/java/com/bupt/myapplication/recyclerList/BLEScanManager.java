@@ -7,6 +7,7 @@ import com.bupt.myapplication.data.PagePointManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import com.bbb.bpen.command.BiBiCommand;
 
 // 数据管理类，用于接受新的扫描地址
 public class BLEScanManager {
@@ -14,6 +15,8 @@ public class BLEScanManager {
     private static BLEScanManager instance;
     private List<String> dataList;
     private List<BLEScanObserver> observers;
+
+    private static final int SCAN_TIMEOUT_MILLISECONDS = 10000; // 10秒超时
 
     private BLEScanManager(){
         this.dataList = new ArrayList<>();
@@ -54,5 +57,7 @@ public class BLEScanManager {
     public List<String> getBLEScanList(){
         return dataList;
     }
+
+
 
 }

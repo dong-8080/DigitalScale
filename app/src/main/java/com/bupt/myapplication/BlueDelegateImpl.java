@@ -1,5 +1,6 @@
 package com.bupt.myapplication;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGatt;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,6 +14,8 @@ import com.bbb.bpen.model.PointData;
 import com.bupt.myapplication.data.PointManager;
 import com.bupt.myapplication.data.StorageStrokeManager;
 import com.bupt.myapplication.data.StrokeManager;
+import com.bupt.myapplication.dialog.MyDialogFragment;
+import com.bupt.myapplication.recyclerList.BLEScanAdapter;
 import com.bupt.myapplication.recyclerList.BLEScanManager;
 import com.bupt.myapplication.util.StringUtils;
 import com.bupt.myapplication.view.DrawingView;
@@ -26,9 +29,18 @@ public class BlueDelegateImpl implements BlueDelegate {
     private DrawingView dw;
     private BLEScanManager bleScanManager;
 
-    public BlueDelegateImpl(DrawingView dw) {
+    private boolean isConnected = false;
+
+    BLEScanAdapter bleScanAdapter;
+
+    private MyDialogFragment myDialogFragment = null;
+
+    private String connectedAddress = "";
+
+    public BlueDelegateImpl(DrawingView dw, MyDialogFragment var0) {
         this.dw = dw;
         this.bleScanManager = BLEScanManager.getInstance();
+        this.myDialogFragment = var0;
     }
 
     @Override
@@ -58,6 +70,8 @@ public class BlueDelegateImpl implements BlueDelegate {
         MyApp.getInstance().setCurMacAddress(device.getAddress());
         Log.e(TAG, "didConnect, status:" + status + " newState:" + newState);
         Log.e(TAG, "didConnect, device mac:" + device.getAddress());
+        this.connectedAddress = device.getAddress();
+        GlobalVars.getInstance().setGlobalAddr(this.connectedAddress);
         try {
             BiBiCommand.stopscan(dw.getContext());
         }catch (Exception e){
@@ -70,6 +84,8 @@ public class BlueDelegateImpl implements BlueDelegate {
             @Override
             public void run() {
                 Toast.makeText(MyApp.getInstance(), "连接蓝牙笔成功", Toast.LENGTH_LONG).show();
+                myDialogFragment.changeColor(connectedAddress);
+                isConnected = true;
             }
         });
     }
@@ -99,7 +115,16 @@ public class BlueDelegateImpl implements BlueDelegate {
 
                 Log.e("PaperChanged", "纸张切换");
                 dw.notifyChangeBackGround();
+                StrokeManager.clearCounter();
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        MainActivity.UndoButtonUnEnabled();
+                    }
+                };
 
+                // 将 Runnable 发布到主线程
+                new Handler(Looper.getMainLooper()).post(runnable);
             } else {
 
                 dw.notifyDraw();

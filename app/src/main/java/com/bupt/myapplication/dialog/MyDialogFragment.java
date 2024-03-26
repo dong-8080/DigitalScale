@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -24,6 +25,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bbb.bpen.command.BiBiCommand;
+import com.bupt.myapplication.GlobalVars;
+import com.bupt.myapplication.IFragmentCallBack;
 import com.bupt.myapplication.MainActivity;
 import com.bupt.myapplication.R;
 import com.bupt.myapplication.recyclerList.BLEScanAdapter;
@@ -35,15 +38,21 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
+//(MainActivity中是灰的)
 public class MyDialogFragment extends DialogFragment implements BLEScanObserver{
 
     private LinearLayout linearLayout1, linearLayout2, linearLayout3;
     private Button button1, button2, button3, button_scan;
+    private boolean isConnected = false;
 
     // BLE扫描的mac地址
     private RecyclerView recyclerView;
     private BLEScanAdapter bleScanAdapter;
     public BLEScanManager bleScanManager;
+    private IFragmentCallBack iFragmentCallBack;
+    public void setiFragmentCallBack(IFragmentCallBack callback){
+        iFragmentCallBack = callback;
+    }
 
 
     @NonNull
@@ -52,6 +61,9 @@ public class MyDialogFragment extends DialogFragment implements BLEScanObserver{
         // 创建一个对话框并返回
         Dialog dialog =  new Dialog(requireContext(), getTheme());
         // 设置对话框外部点击无法取消
+//        if(GlobalVars.getInstance().getOpened() == false){
+//            dialog.setCanceledOnTouchOutside(false);
+//        }
         dialog.setCanceledOnTouchOutside(false);
         return dialog;
     }
@@ -59,6 +71,7 @@ public class MyDialogFragment extends DialogFragment implements BLEScanObserver{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.e("MyDialogFragment", "onCreate");
         // 加载布局文件
         View view = inflater.inflate(R.layout.fragment_dialog, container, false);
 
@@ -91,9 +104,14 @@ public class MyDialogFragment extends DialogFragment implements BLEScanObserver{
         bleScanAdapter = new BLEScanAdapter(data);
         recyclerView.setAdapter(bleScanAdapter);
 
-        bleScanAdapter.notifyDataSetChanged();
+        bleScanAdapter.notifyDataSetChanged();  // 用于刷新recyclerView,也就是每次修改bleScanAdapter中的list，就要调用这个函数刷新一下
 
-        showFragment1();
+        if(GlobalVars.getInstance().getOpened() == true){
+            showFragment3();
+        }
+        else{
+            showFragment1();
+        }
         scanBLEPen();
 
         checkNetwork();
@@ -127,7 +145,10 @@ public class MyDialogFragment extends DialogFragment implements BLEScanObserver{
     }
 
     public void secondScanBLEPen(){
-        Toast.makeText(getContext(),"重复扫描暂未实现，请重启应用", Toast.LENGTH_SHORT).show();
+        bleScanAdapter.clearData();
+        //bleScanAdapter.addData("未找到蓝牙设备，请打开蓝牙笔");
+        bleScanAdapter.notifyDataSetChanged();
+        scanBLEPen();
     }
 
 
@@ -149,7 +170,7 @@ public class MyDialogFragment extends DialogFragment implements BLEScanObserver{
                     e.printStackTrace();
                 }
             }
-        }, 10*1000);
+        }, 5*1000); //10s
     }
 
     public void checkNetwork(){
@@ -161,23 +182,40 @@ public class MyDialogFragment extends DialogFragment implements BLEScanObserver{
     public void finalConfrim(){
         // 提示蓝牙笔有无连接
 
-        if (!BiBiCommand.isConnect(getContext())) {
-            new MaterialAlertDialogBuilder(getContext())
-                    .setTitle("提示")
+        if (!isConnected) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.CustomAlertDialogBackground);
+                    builder.setTitle("蓝牙笔连接提示")
                     .setMessage("当前没有连接蓝牙笔，确认进行下一步吗?")
                     .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             // 用户点击确认按钮的操作
                             dismiss();
+                            GlobalVars.getInstance().setOpened(true);
                         }
                     })
                     .setNegativeButton("取消", null)
                     .show();
-        }else {
+            //Toast.makeText(requireContext(), "蓝牙未连接，不能进行下一步", Toast.LENGTH_SHORT).show();
+        } else if (!isNetworkConnected(getContext())) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.CustomAlertDialogBackground);
+             builder.setTitle("提示")
+                    .setMessage("当前没有连接网络，确认进行下一步吗?")
+                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // 用户点击确认按钮的操作
+                            dismiss();
+                            GlobalVars.getInstance().setOpened(true);
+                        }
+                    })
+                    .setNegativeButton("取消", null)
+                    .show();
+        } else {
             dismiss();
+            GlobalVars.getInstance().setOpened(true);
         }
-
+        GlobalVars.getInstance().setOpened(true);
         // 结束全部的扫描
         try {
             BiBiCommand.stopscan(getContext());
@@ -194,6 +232,12 @@ public class MyDialogFragment extends DialogFragment implements BLEScanObserver{
             return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         }
         return false;
+    }
+
+    public void changeColor(String ads){
+        bleScanAdapter.setBindId(ads);
+        bleScanAdapter.notifyDataSetChanged();
+        isConnected = true;
     }
 
 }

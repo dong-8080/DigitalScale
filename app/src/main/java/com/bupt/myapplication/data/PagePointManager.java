@@ -15,7 +15,7 @@ import java.util.Map;
 // 对应页面所有grid的ID
 public class PagePointManager {
     private static PagePointManager instance;
-    
+    //类的实例化
     public static synchronized PagePointManager getInstance(){
         if (instance==null){
             instance = new PagePointManager();
@@ -26,6 +26,7 @@ public class PagePointManager {
     // 按照pageID存储，比较方便
     private Map<String, List<CenterPoint>> pagePointMapping;
 
+    //获取页面中心点信息
     public Map<String, List<CenterPoint>> getPagePointList(){
         Map<String, List<CenterPoint>> pagePointMapping = new HashMap<>();
         // 读取当前页面的json数据，返回所有的中心点
@@ -36,6 +37,7 @@ public class PagePointManager {
         return pagePointMapping;
     }
 
+    //按照pageID返回
     public List<CenterPoint> getCenterPoints(String pageID){
         if (pagePointMapping==null || pagePointMapping.isEmpty()){
             pagePointMapping = this.getPagePointList();
