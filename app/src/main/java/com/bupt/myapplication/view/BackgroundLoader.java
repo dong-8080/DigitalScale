@@ -46,57 +46,13 @@ public class BackgroundLoader {
         options.inTargetDensity = DisplayMetrics.DENSITY_DEFAULT;
 
         Bitmap bitmap = null;
-        if (pageID.equals("51038")){
-            bitmap = BitmapFactory.decodeResource(this.context.getResources(),
-                    R.drawable.background_51038, options);
-        } else if (pageID.equals("51039")){
-            bitmap = BitmapFactory.decodeResource(this.context.getResources(),
-                    R.drawable.background_51039, options);
-        }else if (pageID.equals("53476")){
-            bitmap = BitmapFactory.decodeResource(this.context.getResources(),
-                    R.drawable.background_53476, options);
-        }else if (pageID.equals("53477")){
-            Log.e("pageid", "load page 53477");
-            bitmap = BitmapFactory.decodeResource(this.context.getResources(),
-                    R.drawable.background_53477, options);
-        }else if (pageID.equals("53478")){
-            Log.e("pageid", "load page 53478");
-            bitmap = BitmapFactory.decodeResource(this.context.getResources(),
-                    R.drawable.background_53478, options);
-        }else if (pageID.equals("53479")){
-            Log.e("pageid", "load page 53479");
-            bitmap = BitmapFactory.decodeResource(this.context.getResources(),
-                    R.drawable.background_53479, options);
-        }else if (pageID.equals("53480")){
-            Log.e("pageid", "load page 53480");
-            bitmap = BitmapFactory.decodeResource(this.context.getResources(),
-                    R.drawable.background_53480, options);
-        }else if (pageID.equals("53481")){
-            Log.e("pageid", "load page 53481");
-            bitmap = BitmapFactory.decodeResource(this.context.getResources(),
-                    R.drawable.background_53481, options);
-        }else if (pageID.equals("53482")){
-            Log.e("pageid", "load page 53482");
-            bitmap = BitmapFactory.decodeResource(this.context.getResources(),
-                    R.drawable.background_53482, options);
-        }else if (pageID.equals("53483")){
-            Log.e("pageid", "load page 53483");
-            bitmap = BitmapFactory.decodeResource(this.context.getResources(),
-                    R.drawable.background_53483, options);
-        }else if (pageID.equals("53484")) {
-            Log.e("pageid", "load page 53484");
-            bitmap = BitmapFactory.decodeResource(this.context.getResources(),
-                    R.drawable.background_53484, options);
-        }
-        // 上面的扯淡if-else代码可以等测试结束后删除
-        else{
-            String background_name = "background_"+pageID;
-            int resourceId = context.getResources().getIdentifier(background_name, "drawable",context.getPackageName());
-            if (resourceId != 0) {
-                bitmap = BitmapFactory.decodeResource(this.context.getResources(), resourceId, options);
-            } else {
-                bitmap = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.drawing_background_empty, options);
-            }
+        String background_name = "background_"+pageID;
+        System.out.println(background_name);
+        int resourceId = context.getResources().getIdentifier(background_name, "drawable",context.getPackageName());
+        if (resourceId != 0) {
+            bitmap = BitmapFactory.decodeResource(this.context.getResources(), resourceId, options);
+        } else {
+            bitmap = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.background_empty, options);
         }
         return bitmap;
     }
@@ -118,7 +74,7 @@ public class BackgroundLoader {
             // 暂时返回一个空图片，并网络请求需要的图片
 //            new LoadImageTask(context, imageView).execute(IMAGE_URL);
             Bitmap bitmap = BitmapFactory.decodeResource(this.context.getResources(),
-                    R.drawable.drawing_background_empty, options);
+                    R.drawable.background_empty, options);
 //            Log.e("BACKGROUND", "pending for " + pageID);
 //            new Thread(new Runnable() {
 //                @Override

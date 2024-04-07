@@ -61,11 +61,11 @@ public class StrokeManager {
     }
 
     public static boolean[] getStrokePages(List<List<StrokePoint>> StrokeList) {
-        boolean[] IsWrite = new boolean[31];
+        boolean[] IsWrite = new boolean[41];
         for (List<StrokePoint> stroke : StrokeList) {
             if (stroke.size() > 0) {
                 StrokePoint firstStrokePoint = stroke.get(0);
-                IsWrite[(int) firstStrokePoint.page_id - 54257] = true;
+                IsWrite[(int) firstStrokePoint.page_id - 54761] = true;
             }
         }
         return IsWrite;

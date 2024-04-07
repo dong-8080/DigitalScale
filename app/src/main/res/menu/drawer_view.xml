@@ -62,6 +62,18 @@
             app:showAsAction="never"
             app:actionLayout="@layout/side"/>
 
+        <item
+            android:id="@+id/accumulator"
+            android:title="@string/accumulator"
+            app:showAsAction="never"
+            app:actionLayout="@layout/side"/>
+
+        <item
+            android:id="@+id/picture"
+            android:title="@string/picture"
+            app:showAsAction="never"
+            app:actionLayout="@layout/side"/>
+
 
     </group>
 </menu>

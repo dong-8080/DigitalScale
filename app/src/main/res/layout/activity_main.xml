@@ -43,6 +43,19 @@
                 android:background="@color/white" />
 
             <FrameLayout
+                android:id="@+id/mmse_picture_fragment"
+                android:layout_width="550dp"
+                android:layout_height="280dp"
+                android:translationZ="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:clickable="true"
+                android:onClick="closeFragment"
+                android:background="@android:color/transparent"/>
+
+            <FrameLayout
                 android:id="@+id/fragment_container2"
                 android:layout_width="520dp"
                 android:layout_height="600dp"
@@ -63,7 +76,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0"
-                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintHorizontal_bias="0"
                 android:background="@color/white" />
 
             <FrameLayout
@@ -78,6 +91,20 @@
                 app:layout_constraintVertical_bias="0"
                 app:layout_constraintHorizontal_bias="0"
                 android:background="@color/white" />
+
+            <FrameLayout
+                android:id="@+id/accumulator_fragment"
+                android:layout_width="280dp"
+                android:layout_height="140dp"
+                android:translationZ="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintHorizontal_bias="1"
+                android:background="@color/white" />
+
 
             <com.bupt.myapplication.view.DrawingView
                 android:id="@+id/drawing_view"

@@ -33,11 +33,12 @@ public class MyTimer extends Fragment {
             int seconds = (int) (curTime / 1000);
             int minutes = seconds / 60;
             seconds = seconds % 60;
-
-            String timeString = String.format("%02d:%02d", minutes, seconds);
+            int tenMs = (int) (curTime % 1000);
+            tenMs = tenMs / 10;
+            String timeString = String.format("%02d:%02d:%02d", minutes, seconds, tenMs);
             textView.setText(timeString);
             if(isStart) {
-                handler.postDelayed(this, 1000); // 1秒后再次调度此任务
+                handler.postDelayed(this, 10); // 10ms后再次调度此任务
             }
         }
     };
@@ -67,6 +68,7 @@ public class MyTimer extends Fragment {
         closeButton = root.findViewById(R.id.close_button);
         startButton = root.findViewById(R.id.start_button);
         clearButton = root.findViewById(R.id.clear_button);
+        textView.setText("00:00:00");
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,9 +94,11 @@ public class MyTimer extends Fragment {
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isStart = false;
+                startButton.setText("开始");
                 runnedTime = 0;
                 startTime = SystemClock.uptimeMillis();
-                textView.setText("00:00");
+                textView.setText("00:00:00");
             }
         });
 

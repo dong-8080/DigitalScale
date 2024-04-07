@@ -78,13 +78,16 @@ public class MainActivity extends AppCompatActivity{
 
 
     // import custom drawing view
+    private static final int PERMISSION_REQUEST_CODE = 200;
     private String soundFileUrl;
     private MyDialogFragment dialogFragment;
     private ReuploadDialogFragment uploadDialogFragment;
     private FrameLayout timerFrameLayout;
     private FrameLayout recorderFrameLayout;
+    private FrameLayout accumulatorFrameLayout;
     private FrameLayout contactFragmentLayout;
     private FrameLayout introductionFragmentLayout;
+    private FrameLayout mmsepictureFragmentLayout;
     private RecyclerView recyclerView;
 
     private LinearLayout linearLayout3;
@@ -92,6 +95,7 @@ public class MainActivity extends AppCompatActivity{
     public DrawingView dw;
     private ContactFragment contactFragment;
     private IntroductionFragment introductionFragment;
+    private mmseFragment mmseFragment;
     private String timeStamp;
     public int cnt=0;
 
@@ -146,12 +150,17 @@ public class MainActivity extends AppCompatActivity{
         timerFrameLayout.setVisibility(View.GONE);
         recorderFrameLayout = findViewById(R.id.record_fragment);
         recorderFrameLayout.setVisibility(View.GONE);
+        accumulatorFrameLayout=findViewById(R.id.accumulator_fragment);
+        accumulatorFrameLayout.setVisibility(View.GONE);
         contactFragmentLayout=findViewById(R.id.contact_us_fragment);
         contactFragmentLayout.setVisibility(View.GONE);
         introductionFragmentLayout=findViewById(R.id.fragment_container2);
         introductionFragmentLayout.setVisibility(View.GONE);
+        mmsepictureFragmentLayout=findViewById(R.id.mmse_picture_fragment);
+        mmsepictureFragmentLayout.setVisibility(View.GONE);
 
         contactUsContainer = findViewById(R.id.fragment_container);
+        checkAndRequestPermissions();
         contactUsContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,6 +175,13 @@ public class MainActivity extends AppCompatActivity{
                 try{
                     introductionFragmentLayout.setVisibility(View.GONE);
                     destroyFragment(introductionFragment);
+                }
+                catch (Exception e){
+
+                }
+                try{
+                    mmsepictureFragmentLayout.setVisibility(View.GONE);
+                    destroyFragment(mmseFragment);
                 }
                 catch (Exception e){
 
@@ -202,6 +218,35 @@ public class MainActivity extends AppCompatActivity{
             }
         });
         recorderFrameLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // 记录触摸点与TextView左上角的距离
+                        dX1 = view.getX() - event.getRawX();
+                        dY1 = view.getY() - event.getRawY();
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        // 更新TextView的位置
+                        view.animate()
+                                .x(event.getRawX() + dX1)
+                                .y(event.getRawY() + dY1)
+                                .setDuration(0)
+                                .start();
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        // 可以在这里添加你想要的任何代码，比如更新布局参数等
+                        break;
+
+                    default:
+                        return false;
+                }
+                return true;
+            }
+        });
+        accumulatorFrameLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 switch (event.getAction()) {
@@ -288,6 +333,29 @@ public class MainActivity extends AppCompatActivity{
                 });
                 replaceFragment(myTimer);
             }
+            else if(id==R.id.accumulator){
+                accumulatorFrameLayout.setVisibility(View.VISIBLE);
+                MyAccumulator myAccumulator=new MyAccumulator();
+                myAccumulator.setiFragmentCallBack(new IFragmentCallBack() {
+                    @Override
+                    public void send2main(String msg) {
+                        if(msg.equals("close")){
+                            destroyFragment(myAccumulator);
+                            accumulatorFrameLayout.setVisibility(View.GONE);
+                        }
+                    }
+                    @Override
+                    public String getFromMain(String msg) {
+                        return null;
+                    }
+                });
+                replaceFragment4(myAccumulator);
+            }
+            else if(id==R.id.picture){
+                mmsepictureFragmentLayout.setVisibility(View.VISIBLE);
+                mmseFragment=new mmseFragment();
+                replaceFragment5(mmseFragment);
+            }
             else if(id == R.id.record){
                 recorderFrameLayout.setVisibility(View.VISIBLE);
                 Recorder recorder = new Recorder();
@@ -330,13 +398,19 @@ public class MainActivity extends AppCompatActivity{
         Menu menu =navigationView.getMenu();
         MenuItem subMenu1=menu.findItem(R.id.timer);
         MenuItem subMenu2=menu.findItem(R.id.record);
+        MenuItem subMenu3=menu.findItem(R.id.accumulator);
+        MenuItem subMenu4=menu.findItem(R.id.picture);
         if(subMenu1.isVisible()){
             subMenu1.setVisible(false);
             subMenu2.setVisible(false);
+            subMenu3.setVisible(false);
+            subMenu4.setVisible(false);
         }
         else{
             subMenu1.setVisible(true);
             subMenu2.setVisible(true);
+            subMenu3.setVisible(true);
+            subMenu4.setVisible(true);
         }
 
     }
@@ -480,7 +554,7 @@ public class MainActivity extends AppCompatActivity{
             List<List<StrokePoint>> strokes_list = StrokeManager.getInstance().getALL();//获取所有笔迹数据
             //上传前确认每一页做答情况
             boolean[] IsWrite=StrokeManager.getStrokePages(strokes_list);
-            if (!IsWrite[1]) {
+            if (!IsWrite[6]) {
                 // 弹出提示对话框
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.CustomAlertDialogBackground);
                 builder.setTitle("上传提示");
@@ -510,25 +584,28 @@ public class MainActivity extends AppCompatActivity{
             if (unfinished) {
                 builder.setTitle("以下问卷未作答，是否继续上传？");
                 // 构建提示信息
-                if(!IsWrite[3]||!IsWrite[4])message+="简易智力状态检测表(MMSE)\n";
-                if(!IsWrite[5])message+="听觉词语学习检测(N1,N2,N3)\n";
-                if(!IsWrite[6]||!IsWrite[7]||!IsWrite[8]||!IsWrite[9])message+="连线测验 STT-A，B\n";
-                if(!IsWrite[10])message+="图形记忆C3A\n";
-                if(!IsWrite[11])message+="图形记忆C3B\n";
-                if(!IsWrite[12])message+="老年抑郁量表(GDS简化版)\n";
-                if(!IsWrite[13])message+="Hachinski缺血指数量表(HIS)\n";
-                if(!IsWrite[14])message+="爱丁堡利手量表(EHI)\n";
-                if(!IsWrite[15]||!IsWrite[16])message+="匹兹堡睡眠质量指数(PSQI)\n";
-                if(!IsWrite[17])message+="主观认知下降(SCD-9)自测问卷\n";
-                if(!IsWrite[18])message+="图形记忆C3C\n";
-                if(!IsWrite[19]||!IsWrite[20]||!IsWrite[21])message+="蒙特利尔认知评估(MOCA)\n";
-                if(!IsWrite[22])message+="词语流畅性测试与画钟评分\n";
-                if(!IsWrite[23])message+="老年人生活能力(ADL)\n";
-                if(!IsWrite[24])message+="临床痴呆指标(CDR)\n";
-                if(!IsWrite[25]||!IsWrite[26])message+="神经精神科问卷(NPI)\n";
-                if(!IsWrite[27]||!IsWrite[28])message+="痴呆病感缺失问卷(AQ-D)——知情者版\n";
-                if(!IsWrite[29]||!IsWrite[30])message+="痴呆病感缺失问卷(AQ-D)——被试版\n";
-                message += "是否继续上传？";
+                if(!IsWrite[8]||!IsWrite[9])message+="神经精神科问卷(NPI)\n";
+                if(!IsWrite[10])message+="老年人生活能力(ADL)\n";
+                if(!IsWrite[11]||!IsWrite[12])message+="临床痴呆指标(CDR)\n";
+                if(!IsWrite[13])message+="痴呆病感缺失问卷—知情者版(AQD)\n";
+                if(!IsWrite[14]||!IsWrite[15])message+="简易智力状态检测表(MMSE)\n";
+                if(!IsWrite[16])message+="数字广度测验(DST)\n";
+                if(!IsWrite[17])message+="听觉词语学习测验(AVLT,N1-N3)\n";
+                if(!IsWrite[18])message+="听觉词语学习测验(AVLT,N4)\n";
+                if(!IsWrite[19])message+="听觉词语学习测验(AVLT,N5)\n";
+                if(!IsWrite[20]||!IsWrite[21])message+="连线测验(TMT) Trails1\n";
+                if(!IsWrite[22]||!IsWrite[23])message+="连线测验(TMT) Trails2\n";
+                if(!IsWrite[24])message+="Hachinski缺血指数量表(HIS)\n";
+                if(!IsWrite[28])message+="老年抑郁量表(GDS简化版)\n";
+                if(!IsWrite[29]||!IsWrite[30])message+="匹兹堡睡眠质量指数(PSQI)\n";
+                if(!IsWrite[31])message+="主观认知下降(SCD-9)自测问卷\n";
+                if(!IsWrite[25]||!IsWrite[27]||!IsWrite[32])message+="复杂图形测验(CFT)\n";
+                if(!IsWrite[33])message+="痴呆病感缺失问卷—被试版(AQD)\n";
+                if(!IsWrite[34]||!IsWrite[35]||!IsWrite[36])message+="蒙特利尔认知评估(MOCA)\n";
+                if(!IsWrite[37])message+="画钟测验(CDT)\n";
+                if(!IsWrite[38])message+="词语流畅度测验(VFT)-A\n";
+                if(!IsWrite[39])message+="词语流畅度测验(VFT)-B\n";
+                if(!IsWrite[40])message+="词语流畅度测验(VFT)-C\n";
             }
             else{
                 builder.setTitle("上传提示");
@@ -539,7 +616,7 @@ public class MainActivity extends AppCompatActivity{
                     .setPositiveButton("继续上传", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String url = "http://10.122.242.208:8082/scale/insertscale";
+                            String url = "http://10.21.201.179:8082/scale/insertscale";
                             PostStrokeObject object = new PostStrokeObject();
                             object.setJson(strokes_list);
                             LocalDateTime now = LocalDateTime.now();
@@ -611,7 +688,12 @@ public class MainActivity extends AppCompatActivity{
                                     });
                                 }
                             });
-                            upLoadSoundFile();
+                            try{
+                                upLoadSoundFile();
+                            }
+                            catch(Exception e){
+                                Log.e("sound_error", String.valueOf(e));
+                            }
                         }
                     })
                     .setNegativeButton("取消", null);
@@ -796,6 +878,18 @@ public class MainActivity extends AppCompatActivity{
         transaction.replace(R.id.fragment_container2, fragment);
         transaction.commit();
     }
+    private void replaceFragment4(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.accumulator_fragment, fragment);
+        transaction.commit();
+    }
+    private void replaceFragment5(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.mmse_picture_fragment, fragment);
+        transaction.commit();
+    }
     private void destroyFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -821,7 +915,7 @@ public class MainActivity extends AppCompatActivity{
 
 // 创建Request对象
         Request request = new Request.Builder()
-                .url("http://10.122.242.208:8082/api/files/upload") // 服务器URL
+                .url("http://10.21.201.179:8082/api/files/upload") // 服务器URL
                 .post(requestBody)
                 .build();
 
@@ -886,5 +980,35 @@ public class MainActivity extends AppCompatActivity{
                 }
             }
         });
+    }
+
+    private void checkAndRequestPermissions() {
+        String[] permissions = new String[]{
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.BLUETOOTH_PRIVILEGED,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.INTERNET,
+                Manifest.permission.RECORD_AUDIO
+        };
+
+        if (!hasPermissions(permissions)) {
+            ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    private boolean hasPermissions(String... permissions) {
+        if (permissions != null) {
+            for (String permission : permissions) {
+                if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
