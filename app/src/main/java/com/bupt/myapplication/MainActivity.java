@@ -616,7 +616,7 @@ public class MainActivity extends AppCompatActivity{
                     .setPositiveButton("继续上传", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String url = "http://10.21.201.179:8082/scale/insertscale";
+                            String url = "http://ibrain.headdb.cn/MMSE/total/scale/insertscale";
                             PostStrokeObject object = new PostStrokeObject();
                             object.setJson(strokes_list);
                             LocalDateTime now = LocalDateTime.now();
@@ -792,18 +792,19 @@ public class MainActivity extends AppCompatActivity{
             return false;
         }
     }
+    public int fail_num=0;
+    public int num_of_files=0;
     public void Reupload() {
         File externalFilesDir = getExternalFilesDir(null);
         File[] files = externalFilesDir.listFiles();
         List<String> jsonFiles = new ArrayList<>();
-        int num_of_files=0;
+        num_of_files=0;
         for (File file : files) {
             if (file.getName().endsWith(".json")) {
                 jsonFiles.add(file.getName());
                 num_of_files++;
             }
         }
-        final int[] fail_num = {0};
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.CustomAlertDialogBackground);
         String message="发现"+num_of_files+"份未上传记录，是否重新上传";
         builder.setTitle("重新上传提示")
@@ -811,7 +812,7 @@ public class MainActivity extends AppCompatActivity{
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String url = "http://10.21.201.179:8082/scale/insertscale";
+                        String url = "http://ibrain.headdb.cn/MMSE/total/scale/insertscale";
                         for(String filename:jsonFiles){
                             OkHttpUtils.getInstance().postAsync(url, getDataFromLocal(filename), new OkHttpUtils.Callback() {
                                 @Override
@@ -823,34 +824,48 @@ public class MainActivity extends AppCompatActivity{
                                                 deleteLocalFile(filename);
                                                 Log.e("Response", response);
                                                 ReuploadDialogFragment.Refresh();
-                                                }else {
-                                                    Log.e("HTTP", response+"");
+                                            }else {
+                                                Log.e("HTTP", response+"");
+                                            }
+                                            num_of_files--;
+                                            if(num_of_files==0){
+                                                if(fail_num !=0){
+                                                    Toast.makeText(MainActivity.this, fail_num+"条信息上传失败!", Toast.LENGTH_LONG).show();
+                                                    fail_num=0;
+                                                }
+                                                else{
+                                                    Toast.makeText(MainActivity.this, "本地存储笔迹已全部上传成功", Toast.LENGTH_LONG).show();
                                                 }
                                             }
-                                        });
-                                    }
+                                        }
+                                    });
+                                }
 
-                                    @Override
-                                    public void onFailure(IOException e) {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                fail_num[0]++;
+                                @Override
+                                public void onFailure(IOException e) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            fail_num++;
+                                            num_of_files--;
+                                            if(num_of_files==0){
+                                                if(fail_num !=0){
+                                                    Toast.makeText(MainActivity.this, fail_num+"条信息上传失败!", Toast.LENGTH_LONG).show();
+                                                    fail_num=0;
+                                                }
+                                                else{
+                                                    Toast.makeText(MainActivity.this, "本地存储笔迹已全部上传成功", Toast.LENGTH_LONG).show();
+                                                }
                                             }
-                                        });
-                                    }
-                                });
-                            }
-                            if(fail_num[0] !=0){
-                                Toast.makeText(MainActivity.this, fail_num[0]+"条信息上传失败!", Toast.LENGTH_LONG).show();
-                            }
-                            else{
-                                Toast.makeText(MainActivity.this, "本地存储笔迹已全部上传成功", Toast.LENGTH_LONG).show();
-                            }
+                                        }
+                                    });
+                                }
+                            });
                         }
-                    })
-                    .setNegativeButton("取消", /* 监听器 */ null)
-                    .show();
+                    }
+                })
+                .setNegativeButton("取消", /* 监听器 */ null)
+                .show();
     }
 
     private void replaceFragment(Fragment fragment){
@@ -915,7 +930,7 @@ public class MainActivity extends AppCompatActivity{
 
 // 创建Request对象
         Request request = new Request.Builder()
-                .url("http://10.21.201.179:8082/api/files/upload") // 服务器URL
+                .url("http://ibrain.headdb.cn/MMSE/total/api/files/upload") // 服务器URL
                 .post(requestBody)
                 .build();
 
