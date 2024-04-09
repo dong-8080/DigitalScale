@@ -616,7 +616,7 @@ public class MainActivity extends AppCompatActivity{
                     .setPositiveButton("继续上传", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String url = "http://ibrain.headdb.cn/MMSE/total/scale/insertscale";
+                            String url = "http://ibrain.headdb.cn/api/scale/insertscale";
                             PostStrokeObject object = new PostStrokeObject();
                             object.setJson(strokes_list);
                             LocalDateTime now = LocalDateTime.now();
@@ -812,7 +812,7 @@ public class MainActivity extends AppCompatActivity{
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String url = "http://ibrain.headdb.cn/MMSE/total/scale/insertscale";
+                        String url = "http://ibrain.headdb.cn/api/scale/insertscale";
                         for(String filename:jsonFiles){
                             OkHttpUtils.getInstance().postAsync(url, getDataFromLocal(filename), new OkHttpUtils.Callback() {
                                 @Override
@@ -930,7 +930,7 @@ public class MainActivity extends AppCompatActivity{
 
 // 创建Request对象
         Request request = new Request.Builder()
-                .url("http://ibrain.headdb.cn/MMSE/total/api/files/upload") // 服务器URL
+                .url("http://ibrain.headdb.cn/api/files/upload") // 服务器URL
                 .post(requestBody)
                 .build();
 
