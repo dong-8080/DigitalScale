@@ -554,7 +554,7 @@ public class MainActivity extends AppCompatActivity{
             List<List<StrokePoint>> strokes_list = StrokeManager.getInstance().getALL();//获取所有笔迹数据
             //上传前确认每一页做答情况
             boolean[] IsWrite=StrokeManager.getStrokePages(strokes_list);
-            if (!IsWrite[6]) {
+            if (!IsWrite[14]) {
                 // 弹出提示对话框
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.CustomAlertDialogBackground);
                 builder.setTitle("上传提示");
@@ -572,7 +572,8 @@ public class MainActivity extends AppCompatActivity{
                 return false;
             }
             boolean unfinished = false;
-            for(int i=3;i<31;i++){
+            for(int i=16;i<=55;i++){
+                if(i==26)continue;
                 if (!IsWrite[i]) {
                     unfinished=true;
                     break;
@@ -584,28 +585,28 @@ public class MainActivity extends AppCompatActivity{
             if (unfinished) {
                 builder.setTitle("以下问卷未作答，是否继续上传？");
                 // 构建提示信息
-                if(!IsWrite[8]||!IsWrite[9])message+="神经精神科问卷(NPI)\n";
-                if(!IsWrite[10])message+="老年人生活能力(ADL)\n";
-                if(!IsWrite[11]||!IsWrite[12])message+="临床痴呆指标(CDR)\n";
-                if(!IsWrite[13])message+="痴呆病感缺失问卷—知情者版(AQD)\n";
-                if(!IsWrite[14]||!IsWrite[15])message+="简易智力状态检测表(MMSE)\n";
-                if(!IsWrite[16])message+="数字广度测验(DST)\n";
-                if(!IsWrite[17])message+="听觉词语学习测验(AVLT,N1-N3)\n";
-                if(!IsWrite[18])message+="听觉词语学习测验(AVLT,N4)\n";
-                if(!IsWrite[19])message+="听觉词语学习测验(AVLT,N5)\n";
-                if(!IsWrite[20]||!IsWrite[21])message+="连线测验(TMT) Trails1\n";
-                if(!IsWrite[22]||!IsWrite[23])message+="连线测验(TMT) Trails2\n";
-                if(!IsWrite[24])message+="Hachinski缺血指数量表(HIS)\n";
-                if(!IsWrite[28])message+="老年抑郁量表(GDS简化版)\n";
-                if(!IsWrite[29]||!IsWrite[30])message+="匹兹堡睡眠质量指数(PSQI)\n";
-                if(!IsWrite[31])message+="主观认知下降(SCD-9)自测问卷\n";
-                if(!IsWrite[25]||!IsWrite[27]||!IsWrite[32])message+="复杂图形测验(CFT)\n";
-                if(!IsWrite[33])message+="痴呆病感缺失问卷—被试版(AQD)\n";
-                if(!IsWrite[34]||!IsWrite[35]||!IsWrite[36])message+="蒙特利尔认知评估(MOCA)\n";
-                if(!IsWrite[37])message+="画钟测验(CDT)\n";
-                if(!IsWrite[38])message+="词语流畅度测验(VFT)-A\n";
-                if(!IsWrite[39])message+="词语流畅度测验(VFT)-B\n";
-                if(!IsWrite[40])message+="词语流畅度测验(VFT)-C\n";
+                if(!IsWrite[16]||!IsWrite[17])message+="主观认知衰退量表(SCDS)\n";
+                if(!IsWrite[18]||!IsWrite[19])message+="简易智力状态检测表(MMSE)\n";
+                if(!IsWrite[20]||!IsWrite[21]||!IsWrite[22]||!IsWrite[23])message+="蒙特利尔认知评估(MOCA)\n";
+                if(!IsWrite[24])message+="画钟测验(CDT)\n";
+                if(!IsWrite[25])message+="听觉词语学习测验(AVLT)\n";
+                if(!IsWrite[27]||!IsWrite[28])message+="连线测验(TMT) 测试1\n";
+                if(!IsWrite[29]||!IsWrite[30])message+="连线测验(TMT) 测试2\n";
+                if(!IsWrite[31])message+="数字广度测验(DST)\n";
+                if(!IsWrite[32])message+="词语流畅度测验(VFT)-A\n";
+                if(!IsWrite[33])message+="词语流畅度测验(VFT)-B\n";
+                if(!IsWrite[34])message+="词语流畅度测验(VFT)-C\n";
+                if(!IsWrite[35]||!IsWrite[36]||!IsWrite[37])message+="汉密尔顿抑郁量表(HAMD)\n";
+                if(!IsWrite[38])message+="汉密尔顿抑郁量表(HAMA)\n";
+                if(!IsWrite[39])message+="老年人生活能力(ADL)\n";
+                if(!IsWrite[40]||!IsWrite[41])message+="匹兹堡睡眠质量指数(PSQI)\n";
+                if(!IsWrite[42]||!IsWrite[43])message+="神经精神科问卷(NPI)\n";
+                if(!IsWrite[44])message+="痴呆病感缺失问卷—被试版(AQD)\n";
+                if(!IsWrite[45])message+="痴呆病感缺失问卷—知情者版(AQD)\n";
+                if(!IsWrite[46])message+="Hachinski缺血指数量表(HIS)\n";
+                if(!IsWrite[47]||!IsWrite[48]||!IsWrite[50])message+="复杂图形测验(CFT)\n";
+                if(!IsWrite[51]||!IsWrite[52]||!IsWrite[53]||!IsWrite[54]||!IsWrite[55])message+="临床痴呆指标(CDR)\n";
+                if(!IsWrite[49])message+="老年抑郁量表(GDS简化版)\n";
             }
             else{
                 builder.setTitle("上传提示");
@@ -824,10 +825,10 @@ public class MainActivity extends AppCompatActivity{
                                                 deleteLocalFile(filename);
                                                 Log.e("Response", response);
                                                 ReuploadDialogFragment.Refresh();
-                                            }else {
-                                                Log.e("HTTP", response+"");
-                                            }
-                                            num_of_files--;
+                                                }else {
+                                                    Log.e("HTTP", response+"");
+                                                }
+                                                num_of_files--;
                                             if(num_of_files==0){
                                                 if(fail_num !=0){
                                                     Toast.makeText(MainActivity.this, fail_num+"条信息上传失败!", Toast.LENGTH_LONG).show();
@@ -837,35 +838,35 @@ public class MainActivity extends AppCompatActivity{
                                                     Toast.makeText(MainActivity.this, "本地存储笔迹已全部上传成功", Toast.LENGTH_LONG).show();
                                                 }
                                             }
-                                        }
-                                    });
-                                }
+                                            }
+                                        });
+                                    }
 
-                                @Override
-                                public void onFailure(IOException e) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            fail_num++;
-                                            num_of_files--;
-                                            if(num_of_files==0){
-                                                if(fail_num !=0){
-                                                    Toast.makeText(MainActivity.this, fail_num+"条信息上传失败!", Toast.LENGTH_LONG).show();
-                                                    fail_num=0;
-                                                }
-                                                else{
-                                                    Toast.makeText(MainActivity.this, "本地存储笔迹已全部上传成功", Toast.LENGTH_LONG).show();
+                                    @Override
+                                    public void onFailure(IOException e) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                fail_num++;
+                                                num_of_files--;
+                                                if(num_of_files==0){
+                                                    if(fail_num !=0){
+                                                        Toast.makeText(MainActivity.this, fail_num+"条信息上传失败!", Toast.LENGTH_LONG).show();
+                                                        fail_num=0;
+                                                    }
+                                                    else{
+                                                        Toast.makeText(MainActivity.this, "本地存储笔迹已全部上传成功", Toast.LENGTH_LONG).show();
+                                                    }
                                                 }
                                             }
-                                        }
-                                    });
-                                }
-                            });
+                                        });
+                                    }
+                                });
+                            }
                         }
-                    }
-                })
-                .setNegativeButton("取消", /* 监听器 */ null)
-                .show();
+                    })
+                    .setNegativeButton("取消", /* 监听器 */ null)
+                    .show();
     }
 
     private void replaceFragment(Fragment fragment){
