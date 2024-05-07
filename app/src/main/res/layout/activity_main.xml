@@ -95,7 +95,7 @@
             <FrameLayout
                 android:id="@+id/accumulator_fragment"
                 android:layout_width="280dp"
-                android:layout_height="140dp"
+                android:layout_height="160dp"
                 android:translationZ="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

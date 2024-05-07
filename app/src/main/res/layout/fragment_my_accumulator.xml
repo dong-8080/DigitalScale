@@ -51,13 +51,14 @@
         android:id="@+id/button_add1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="错误连接"  android:textSize="15dp"
+        android:text="错误连接"
+        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.143"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8"
-        app:layout_constraintHorizontal_bias="0.15" />
+        app:layout_constraintVertical_bias="0.718" />
 
     <Button
         android:id="@+id/button_add2"
@@ -67,9 +68,22 @@
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.847"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8"
-        app:layout_constraintHorizontal_bias="0.85" />
+        app:layout_constraintVertical_bias="0.718" />
+
+    <Button
+        android:id="@+id/button_clear"
+        android:layout_width="225dp"
+        android:layout_height="42dp"
+        android:text="重置"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

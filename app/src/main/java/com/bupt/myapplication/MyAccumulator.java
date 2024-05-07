@@ -17,6 +17,7 @@ public class MyAccumulator extends Fragment {
     private Button mAddButton1;
     private Button mAddButton2;
     private Button closeButton;
+    private Button mClearButton;
     private View rootView;
     private int mCount1 = 0;
     private int mCount2 = 0;
@@ -48,6 +49,16 @@ public class MyAccumulator extends Fragment {
         mTextView2.setText(String.valueOf(mCount2));
         closeButton=rootView.findViewById(R.id.close_button);
         mAddButton1 = rootView.findViewById(R.id.button_add1);
+        mClearButton=rootView.findViewById(R.id.button_clear);
+        mClearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCount1=0;
+                mCount2=0;
+                mTextView1.setText(String.valueOf(mCount1));
+                mTextView2.setText(String.valueOf(mCount2));
+            }
+        });
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

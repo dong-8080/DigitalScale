@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bupt.myapplication.MainActivity;
 import com.bupt.myapplication.R;
+import com.bupt.myapplication.ReuploadCallback;
 import com.bupt.myapplication.recyclerList.BLEScanAdapter;
 import com.bupt.myapplication.recyclerList.ReuploadAdapter;
 
@@ -49,7 +50,10 @@ public class ReuploadDialogFragment extends DialogFragment {
         button1=view.findViewById(R.id.upload_all);
 
         //refresh.setOnClickListener(v->Refresh());
-        button1.setOnClickListener(v->submit());
+        button1.setOnClickListener(v -> {
+            button1.setEnabled(false);
+            submit();
+        });
 
         recyclerView = view.findViewById(R.id.recycler_view_reupload);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -65,7 +69,17 @@ public class ReuploadDialogFragment extends DialogFragment {
     }
 
     private void submit() {
-        activity.Reupload();
+        activity.Reupload(new ReuploadCallback() {
+            @Override
+            public void onUploadComplete() {
+                button1.setEnabled(true);
+            }
+
+            @Override
+            public void onUploadFailed() {
+                button1.setEnabled(true);
+            }
+        });
     }
 
     public static void Refresh() {

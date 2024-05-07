@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
-import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,7 +35,6 @@ import com.bupt.myapplication.data.StrokePoint;
 import com.bupt.myapplication.dialog.MyDialogFragment;
 import com.bupt.myapplication.dialog.ReuploadDialogFragment;
 import com.bupt.myapplication.object.PostStrokeObject;
-import com.bupt.myapplication.recyclerList.ReuploadAdapter;
 import com.bupt.myapplication.view.DrawingView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
@@ -108,6 +106,7 @@ public class MainActivity extends AppCompatActivity{
     private float dX, dY;
     private float dX1, dY1;
 
+    public boolean checkflag=true;
     public static void UndoButtonUnEnabled() {
         undoButton.setEnabled(false);
         int drawableId = R.drawable.ic_withdraw_gray;
@@ -617,7 +616,7 @@ public class MainActivity extends AppCompatActivity{
                     .setPositiveButton("继续上传", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String url = "http://caimi.bupt.edu.cn/api/scale/insertscale";
+                            String url = "http://192.168.0.103:8082/scale/insertscale";
                             PostStrokeObject object = new PostStrokeObject();
                             object.setJson(strokes_list);
                             LocalDateTime now = LocalDateTime.now();
@@ -795,7 +794,7 @@ public class MainActivity extends AppCompatActivity{
     }
     public int fail_num=0;
     public int num_of_files=0;
-    public void Reupload() {
+    public void Reupload(ReuploadCallback callback) {
         File externalFilesDir = getExternalFilesDir(null);
         File[] files = externalFilesDir.listFiles();
         List<String> jsonFiles = new ArrayList<>();
@@ -813,7 +812,10 @@ public class MainActivity extends AppCompatActivity{
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String url = "http://caimi.bupt.edu.cn/api/scale/insertscale";
+                        if(num_of_files==0){
+                            callback.onUploadFailed();
+                        }
+                        String url = "http://192.168.0.103:8082/scale/insertscale";
                         for(String filename:jsonFiles){
                             OkHttpUtils.getInstance().postAsync(url, getDataFromLocal(filename), new OkHttpUtils.Callback() {
                                 @Override
@@ -833,9 +835,11 @@ public class MainActivity extends AppCompatActivity{
                                                 if(fail_num !=0){
                                                     Toast.makeText(MainActivity.this, fail_num+"条信息上传失败!", Toast.LENGTH_LONG).show();
                                                     fail_num=0;
+                                                    callback.onUploadFailed();
                                                 }
                                                 else{
                                                     Toast.makeText(MainActivity.this, "本地存储笔迹已全部上传成功", Toast.LENGTH_LONG).show();
+                                                    callback.onUploadComplete();
                                                 }
                                             }
                                             }
@@ -853,9 +857,11 @@ public class MainActivity extends AppCompatActivity{
                                                     if(fail_num !=0){
                                                         Toast.makeText(MainActivity.this, fail_num+"条信息上传失败!", Toast.LENGTH_LONG).show();
                                                         fail_num=0;
+                                                        callback.onUploadFailed();
                                                     }
                                                     else{
                                                         Toast.makeText(MainActivity.this, "本地存储笔迹已全部上传成功", Toast.LENGTH_LONG).show();
+                                                        callback.onUploadComplete();
                                                     }
                                                 }
                                             }
@@ -865,7 +871,12 @@ public class MainActivity extends AppCompatActivity{
                             }
                         }
                     })
-                    .setNegativeButton("取消", /* 监听器 */ null)
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        callback.onUploadFailed();
+                    }
+                })
                     .show();
     }
 
@@ -931,7 +942,7 @@ public class MainActivity extends AppCompatActivity{
 
 // 创建Request对象
         Request request = new Request.Builder()
-                .url("http://caimi.bupt.edu.cn/api/files/upload") // 服务器URL
+                .url("http://192.168.0.103:8082/scale/insertscale") // 服务器URL
                 .post(requestBody)
                 .build();
 
