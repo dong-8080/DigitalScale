@@ -1,0 +1,50 @@
+package com.bupt.myapplication.fragment;
+
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.bupt.myapplication.R;
+
+/*
+* 使用说明页面
+* TODO：太简陋了，后面考虑换成网页吧，把那个pdf变成网页，然后点击跳转，或者变成显示pdf
+*  */
+public class IntroductionFragment extends Fragment {
+
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    private String mParam1;
+    private String mParam2;
+
+    public IntroductionFragment() {}
+
+    public static IntroductionFragment newInstance(String param1, String param2) {
+        IntroductionFragment fragment = new IntroductionFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_introduction, container, false);
+    }
+}
