@@ -2,6 +2,8 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/app/src/main/assets/scale_v1.csv" charset="GBK" />
-    <file url="PROJECT" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/bupt/myapplication/object/PostStrokeObject.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/bupt/myapplication/object/UploadStrokeObject.java" charset="GBK" />
+    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

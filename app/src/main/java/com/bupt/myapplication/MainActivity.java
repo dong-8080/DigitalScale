@@ -35,18 +35,21 @@ import com.bupt.myapplication.fragment.IntroductionFragment;
 import com.bupt.myapplication.fragment.MyAccumulator;
 import com.bupt.myapplication.fragment.MyTimer;
 import com.bupt.myapplication.fragment.mmseFragment;
+import com.bupt.myapplication.object.UploadStrokeObject;
 import com.bupt.myapplication.util.CSVReaderUtil;
 import com.bupt.myapplication.util.OkHttpUtils;
 import com.bupt.myapplication.data.PointManager;
 import com.bupt.myapplication.data.StrokeManager;
 import com.bupt.myapplication.data.StrokePoint;
-import com.bupt.myapplication.dialog.MyDialogFragment;
+import com.bupt.myapplication.dialog.MainDialogFragment;
 import com.bupt.myapplication.dialog.ReuploadDialogFragment;
 import com.bupt.myapplication.object.PostStrokeObject;
+import com.bupt.myapplication.util.StringUtils;
 import com.bupt.myapplication.view.DrawingView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -66,9 +69,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     // import custom drawing view
     private static final int PERMISSION_REQUEST_CODE = 200;
 
-    private MyDialogFragment dialogFragment;
+    private MainDialogFragment dialogFragment;
     private ReuploadDialogFragment uploadDialogFragment;
     private FrameLayout timerFrameLayout;
     private FrameLayout recorderFrameLayout;
@@ -371,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // 处理相关的蓝牙笔连接和笔迹处理
-        dialogFragment = new MyDialogFragment();
+        dialogFragment = new MainDialogFragment();
         blueDelegate = new BlueDelegateImpl(dw, dialogFragment);
         dialogFragment.show(getSupportFragmentManager(), "dialog");
 
@@ -390,9 +395,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showOrientationPrompt() {
-        // 强制转成竖屏会更好
+        // 强制转成竖屏会更好，后续再改，暂时设置成给出一个提示用竖屏，会引发一些问题
         Toast.makeText(MainActivity.this, "为了更好的使用体验，请切换至竖屏使用!", Toast.LENGTH_LONG).show();
-
     }
 
     //创建菜单栏
@@ -405,7 +409,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     //间隔十秒扫描一次
-
     private BluetoothLEService service = null;
     private ServiceConnection coon = new ServiceConnection() {
         @Override
@@ -477,6 +480,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // 旧方法，测试完成后删除
     public boolean confirm_submit_old(){
         // 数据上传操作
         String message = "个人信息未填写完整，请检查个人信息后再次上传";
@@ -601,24 +605,60 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
     // 向后端提交全部数据，并初始化
     public void submit_strokes(){
         List<List<StrokePoint>> strokes_list = StrokeManager.getInstance().getALL();//获取所有笔迹数据
 
-        String url = "http://ibrain.bupt.edu.cn/api/scale/insertscale";
-        PostStrokeObject object = new PostStrokeObject();
-        object.setJson(strokes_list);
+        // Jingrixing版本需要存放在本地，暂时不上传至服务器
+//        if (MyApp.getInstance().getScale_name()=="Jingrixing"){
+//
+//            save_to_txt_jingrixing(strokes_list);
+//            return;
+//        }
+
+        // 迟航民需要的数据上传
+//        String url = "http://ibrain.bupt.edu.cn/api/scale/insertscale";
+//        String url = "http://10.129.138.61:8080/strokes-records";
+//        PostStrokeObject object = new PostStrokeObject();
+//        object.setJson(strokes_list);
+//        LocalDateTime now = LocalDateTime.now();
+//        String timString = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+//        object.setTim(timString);
+//        object.setPenId(GlobalVars.getInstance().getGlobalAddr());
+//
+//        // 测试
+//        object.setPatientId("1234567");
+//        timeStamp = String.valueOf(System.currentTimeMillis());
+//        object.setTimeStamp(timeStamp);
+//        Gson gson = new Gson();
+//        String json_str = gson.toJson(object);
+//        Log.e("HTTP", "提交数据");
+//        Log.e("HTPP", json_str);
+
+
+        // 曹安棋本地上传 2024/12/20
+        // 转换为json字符串储存
+        String example_str = StringUtils.readRawJsonFile(MainActivity.this, R.raw.example_strokes);
+        Log.e("example", example_str+"");
+
+        String url = "http://10.129.138.61:8080/scalesSetRecords/androidUpload";
+        UploadStrokeObject uploadStroke = new UploadStrokeObject();
+        uploadStroke.setScalesSetRecordId(MyApp.getInstance().getParticipantID());
+        uploadStroke.setPenMac(MyApp.getInstance().getCurMacAddress());
         LocalDateTime now = LocalDateTime.now();
-        String timString = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        object.setTim(timString);
-        object.setPenId(GlobalVars.getInstance().getGlobalAddr());
-        timeStamp = String.valueOf(System.currentTimeMillis());
-        object.setTimeStamp(timeStamp);
+            String timString = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        uploadStroke.setUploadTime(timString);
+        uploadStroke.setStrokesList(strokes_list);
         Gson gson = new Gson();
-        String json_str = gson.toJson(object);
-        //转换为json字符串储存
-//            String example_str = StringUtils.readRawJsonFile(MainActivity.this, R.raw.example_strokes);
-//            Log.e("example", example_str+"");
+
+        String json = gson.toJson(uploadStroke);
+        JsonArray jsonArray = new JsonArray();
+        jsonArray.add(json);
+
+        String json_str = gson.toJson(jsonArray);
+
         OkHttpUtils.getInstance().postAsync(url, json_str, new OkHttpUtils.Callback() {
             @Override
             public void onResponse(String response) {
@@ -641,7 +681,11 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("Response", response);
 
                         } else {
+                            // 未知错误，需要针对每个的情况进行判断处理
+                            // 出现重定向错误，检查网络连接  提前弹窗确认下
+                            Log.e("HTTP",  "上传数据出现未知错误");
                             Log.e("HTTP", response + "");
+                            uploadFailed(json_str, timString);
                         }
                     }
                 });
@@ -649,27 +693,31 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(IOException e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.layout_upload_failed, null);
-                        Toast toast = new Toast(MainActivity.this);
-                        toast.setView(view);
-                        toast.setDuration(Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-//                                            UndoButtonUnEnabled();
-                        saveDataToLocal(json_str, timString);//本地存储
-                        //Log.e("debug", "ok");
+                uploadFailed(json_str, timString);
+            }
+        });
+    }
 
-                        // 清除存储的待上传笔迹、页面存储笔迹以及初始化笔迹
-                        StrokeManager.getInstance().clearAll();
-                        MyApp.getInstance().setPaperid(null);
-                        PointManager.getInstance().clear();
-                        dw.initDraw();
-                    }
-                });
+    public void uploadFailed(String json_str, String timString){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.layout_upload_failed, null);
+                Toast toast = new Toast(MainActivity.this);
+                toast.setView(view);
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+//                                            UndoButtonUnEnabled();
+                saveDataToLocal(json_str, timString);//本地存储
+                //Log.e("debug", "ok");
+
+                // 清除存储的待上传笔迹、页面存储笔迹以及初始化笔迹
+                StrokeManager.getInstance().clearAll();
+                MyApp.getInstance().setPaperid(null);
+                PointManager.getInstance().clear();
+                dw.initDraw();
             }
         });
     }
@@ -684,17 +732,34 @@ public class MainActivity extends AppCompatActivity {
         // 判断量表的版本，判定页码数在v1的55240-55287之间的多，还是在V2的69135-69179的页码数量
         int scale_v1_page_count = 0;
         int scale_v2_page_count = 0;
+        int scale_jingrixing_count = 0;
+
         for (long page_id: pageIds){
-            if (page_id<=55287 && page_id>=55240)
+            if (page_id<=55287 && page_id>=55240) {
                 scale_v1_page_count++;
-            else if (page_id<=69179 && page_id>=69135)
+            }else if (page_id<=69179 && page_id>=69135) {
                 scale_v2_page_count++;
+                MyApp.getInstance().setScale_name("v2");
+            }else if (page_id<=74533 && page_id>=74521) {
+                scale_jingrixing_count++;
+            }
         }
         String scale_name_path = "";
-        if (scale_v1_page_count>scale_v2_page_count)
+
+
+        if (scale_v1_page_count>scale_v2_page_count){
+            MyApp.getInstance().setScale_name("v1");
             scale_name_path = "scale_v1.csv";
-        else
+        }
+        else if (scale_v1_page_count< scale_v2_page_count){
             scale_name_path = "scale_v2.csv";
+            MyApp.getInstance().setScale_name("v2");
+        }
+        else if (scale_v1_page_count==scale_v2_page_count) {
+            // 按照常理来说，两部分都等于0，表示本份量表属于其他量表，即jingrixing的量表，不判定直接保存了
+            scale_name_path = "scale_jingrixing.csv";
+            MyApp.getInstance().setScale_name("Jingrixing");
+        }
 
 
         // 读取坐标和名称对应的csv，第一个元素是表头，直接去除掉
@@ -729,6 +794,23 @@ public class MainActivity extends AppCompatActivity {
         return uncompleted_pages;
     }
 
+    // 紧急凑的代码，先把数据存成一个txt，等后端写完再读取统一上传
+    private void save_to_txt_jingrixing(List<List<StrokePoint>> strokes_list){
+        Gson gson = new Gson();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMddHHmm");
+        String fileName = sdf.format(new Date()) + ".txt";
+
+        String json_str = gson.toJson(strokes_list);
+
+        saveDataToLocal(json_str, fileName);//本地存储
+        //Log.e("debug", "ok");
+
+        // 清除存储的待上传笔迹、页面存储笔迹以及初始化笔迹
+        StrokeManager.getInstance().clearAll();
+        MyApp.getInstance().setPaperid(null);
+        PointManager.getInstance().clear();
+        dw.initDraw();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -958,9 +1040,6 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-
-
-
     private void checkAndRequestPermissions() {
         String[] permissions = new String[]{
                 Manifest.permission.BLUETOOTH_ADMIN,
@@ -972,7 +1051,7 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.ACCESS_NETWORK_STATE,
                 Manifest.permission.ACCESS_WIFI_STATE,
                 Manifest.permission.INTERNET,
-                Manifest.permission.RECORD_AUDIO
+                Manifest.permission.RECORD_AUDIO,
         };
 
         if (!hasPermissions(permissions)) {

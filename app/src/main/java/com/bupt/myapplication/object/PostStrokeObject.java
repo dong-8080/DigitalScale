@@ -6,11 +6,24 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+
+// todo: 像后端提交数据，改名字
 public class PostStrokeObject {
     public List<List<StrokePoint>> json;
     public String penId;
-    private String tim;
+    private String time;
     private String timeStamp;
+
+    // todo: 测试使用
+    private String patientId;
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
 
     public String getTimeStamp() {
         return timeStamp;
@@ -21,11 +34,11 @@ public class PostStrokeObject {
     }
 
     public String getTim() {
-        return tim;
+        return time;
     }
 
-    public void setTim(String tim) {
-        this.tim = tim;
+    public void setTim(String time) {
+        this.time = time;
     }
 
     public String getPenId() {
