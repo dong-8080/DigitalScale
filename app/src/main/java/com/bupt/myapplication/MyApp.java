@@ -16,24 +16,17 @@ public class MyApp extends Application {
     private String curMacAddress;
     // 当前是否有笔连接，如有连接可以跳过进入答题页面绑笔的弹窗
     private String userId;
-    private String phone;
-
     // 选择试卷的id
     private String paperid;
 
-    // 选择试卷的年级
-    private String grade;
+    // 被试的ID
+    private String participantID;
+
+    // 量表名称, 区分不同的版本，比如v1，v2，jingrixing
+    private String scale_name;
 
     public static void setInstance(MyApp instance) {
         MyApp.instance = instance;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public static MyApp getInstance() {
@@ -85,11 +78,19 @@ public class MyApp extends Application {
         this.paperid = paperid;
     }
 
-    public String getGrade() {
-        return grade;
+    public String getParticipantID() {
+        return participantID;
     }
 
-    public void setGrade(String grade) {
-        this.grade = grade;
+    public void setParticipantID(String participantID) {
+        this.participantID = participantID;
+    }
+
+    public void setScale_name(String name){
+        this.scale_name = name;
+    }
+
+    public String getScale_name(){
+        return this.scale_name;
     }
 }

@@ -14,8 +14,7 @@ import com.bupt.myapplication.GlobalVars;
 import com.bupt.myapplication.MyApp;
 import com.bupt.myapplication.data.PointManager;
 import com.bupt.myapplication.data.StrokeManager;
-import com.bupt.myapplication.dialog.MyDialogFragment;
-import com.bupt.myapplication.recyclerList.BLEScanAdapter;
+import com.bupt.myapplication.dialog.MainDialogFragment;
 import com.bupt.myapplication.recyclerList.BLEScanManager;
 import com.bupt.myapplication.util.StringUtils;
 import com.bupt.myapplication.view.DrawingView;
@@ -31,11 +30,11 @@ public class BlueDelegateImpl implements BlueDelegate {
     private boolean isConnected = false;
 
 
-    private MyDialogFragment myDialogFragment = null;
+    private MainDialogFragment myDialogFragment = null;
 
     private String connectedAddress = "";
 
-    public BlueDelegateImpl(DrawingView dw, MyDialogFragment var0) {
+    public BlueDelegateImpl(DrawingView dw, MainDialogFragment var0) {
         this.dw = dw;
         this.bleScanManager = BLEScanManager.getInstance();
         this.myDialogFragment = var0;
@@ -109,7 +108,7 @@ public class BlueDelegateImpl implements BlueDelegate {
                 MyApp.getInstance().setPaperid(newPaperId);
 
 
-                Log.e("PaperChanged", "纸张切换");
+                Log.e("PaperChanged", "纸张切换至"+newPaperId);
                 dw.notifyChangeBackGround();
                 StrokeManager.clearCounter();
 
