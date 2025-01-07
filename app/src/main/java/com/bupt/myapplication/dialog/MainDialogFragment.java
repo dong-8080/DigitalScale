@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -16,7 +17,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -24,13 +24,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bbb.bpen.command.BiBiCommand;
-import com.bupt.myapplication.GlobalVars;
 import com.bupt.myapplication.MyApp;
 import com.bupt.myapplication.fragment.IFragmentCallBack;
 import com.bupt.myapplication.R;
@@ -39,7 +39,6 @@ import com.bupt.myapplication.recyclerList.BLEScanManager;
 import com.bupt.myapplication.recyclerList.BLEScanObserver;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 // 首页的dialog，展示一个宣传图和被试编号、蓝牙笔连接
@@ -54,9 +53,7 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
     private EditText editTextMonth1, editTextMonth2;
 
     private String participantId;
-    private boolean isConnected = false;
 
-    // BLE扫描的mac地址
     private RecyclerView recyclerView;
     private BLEScanAdapter bleScanAdapter;
     public BLEScanManager bleScanManager;
@@ -98,7 +95,6 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
 
         // 设置按钮点击事件
         // 跳转到被试编号填写界面
-        // TODO: For Jingrixing demo
         button1.setOnClickListener(v -> showFragment2());
 
         // 被试编号填写，逻辑复杂些，检查ID正确性后才能进行下一步
@@ -106,6 +102,7 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
         // TODO：如果ID和本地的重复，需要重复读取一下
         // 开始测试删除操作
         button2.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View view) {
                 participantId = "HEAD_S" + editTextS1.getText() + editTextS2.getText() + "_00" +
@@ -116,8 +113,16 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
 
                 if (participantId.length() == 22) {
                     MyApp.getInstance().setParticipantID(participantId);
+
                     // TODO：可以将toolbar设置成被试的ID
-                    showFragment3();
+                    // TODO: 理论上这里应该将软键盘隐藏
+                    // 已经连接好蓝牙笔，跳过连接蓝牙笔步骤；表示运行提交一次数据后，再次进入填写id页面
+                    if (MyApp.getInstance().isBLEConnected()){
+                        finalConfrim();
+                    }else {
+                        // 没有连接好蓝牙笔，进入连接蓝牙笔步骤；表示第一次运行
+                        showFragment3();
+                    }
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("警告")
@@ -146,7 +151,13 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         List<String> data = new ArrayList<>();
-        data.add("未找到蓝牙设备，请打开蓝牙笔");
+        if(MyApp.getInstance().isBLEConnected()){
+            String curMacAdress = MyApp.getInstance().getCurMacAddress();
+            data.add(curMacAdress);
+
+        }else{
+            data.add("未找到蓝牙设备，请打开蓝牙笔");
+        }
 
         bleScanAdapter = new BLEScanAdapter(data);
         recyclerView.setAdapter(bleScanAdapter);
@@ -162,15 +173,6 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
         editTextMonth1 = view.findViewById(R.id.editTextMonth1);
         editTextMonth2 = view.findViewById(R.id.editTextMonth2);
 
-        // 设置默认值
-//        Calendar calendar = Calendar.getInstance();
-//        int year = calendar.get(Calendar.YEAR);
-//        int month = calendar.get(Calendar.MONTH) + 1; // 月份是从0开始的，所以需要加1
-//        editTextYear1.setText(String.valueOf((year - 2000) / 10));
-//        editTextYear2.setText(String.valueOf(year - 2020));
-//        editTextMonth1.setText(String.valueOf(month / 10));
-//        editTextMonth2.setText(String.valueOf(month % 10));
-
         setupEditText(editTextS1, editTextS2, null);
         setupEditText(editTextS2, editTextX1, editTextS1);
         setupEditText(editTextX1, editTextX2, editTextS2);
@@ -185,11 +187,8 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
 
         bleScanAdapter.notifyDataSetChanged();  // 用于刷新recyclerView,也就是每次修改bleScanAdapter中的list，就要调用这个函数刷新一下
 
-        if (GlobalVars.getInstance().getOpened() == true) {
-            showFragment3();
-        } else {
-            showFragment1();
-        }
+
+        showFragment1();
         scanBLEPen();
 
         checkNetwork();
@@ -244,6 +243,11 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
     }
 
 
+    private void dismissAll(){
+        linearLayout1.setVisibility(View.GONE);
+        linearLayout2.setVisibility(View.GONE);
+        linearLayout3.setVisibility(View.GONE);
+    }
 
     private void showFragment(LinearLayout linearLayout) {
         linearLayout1.setVisibility(View.GONE);
@@ -314,7 +318,7 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
     public void finalConfrim() {
         // 提示蓝牙笔有无连接
 
-        if (!isConnected) {
+        if (!MyApp.getInstance().isBLEConnected()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("蓝牙笔连接提示")
                     .setMessage("当前没有连接蓝牙笔，确认进行下一步吗?")
@@ -323,7 +327,7 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
                         public void onClick(DialogInterface dialogInterface, int i) {
                             // 用户点击确认按钮的操作
                             dismiss();
-                            GlobalVars.getInstance().setOpened(true);
+
                         }
                     })
                     .setNegativeButton("取消", null)
@@ -338,16 +342,13 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
                         public void onClick(DialogInterface dialogInterface, int i) {
                             // 用户点击确认按钮的操作
                             dismiss();
-                            GlobalVars.getInstance().setOpened(true);
                         }
                     })
                     .setNegativeButton("取消", null)
                     .show();
         } else {
             dismiss();
-            GlobalVars.getInstance().setOpened(true);
         }
-        GlobalVars.getInstance().setOpened(true);
         // 结束全部的扫描
         try {
             BiBiCommand.stopscan(getContext());
@@ -369,7 +370,7 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
     public void changeColor(String ads) {
         bleScanAdapter.setBindId(ads);
         bleScanAdapter.notifyDataSetChanged();
-        isConnected = true;
+
     }
 
 }

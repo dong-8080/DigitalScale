@@ -45,7 +45,7 @@ public class OkHttpUtils {
                     return;
                 }
 
-                callback.onResponse(response.body().string());
+                callback.onResponse(response);
             }
         });
     }
@@ -74,14 +74,14 @@ public class OkHttpUtils {
                     return;
                 }
 
-                callback.onResponse(response.body().string());
+                callback.onResponse(response);
             }
         });
     }
 
     // 回调接口
     public interface Callback {
-        void onResponse(String response);
+        void onResponse(Response response);
         void onFailure(IOException e);
     }
 }
