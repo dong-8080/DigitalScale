@@ -9,13 +9,11 @@ import java.util.List;
 public class MyApp extends Application {
     private static MyApp instance;
 
-    // 当前可绑定笔的mac地址，最多只能设定为三个
-    private List<String> bindedMacAddresses;
+
 
     // 当前正在连接笔的mac地址，为一支确定的笔
-    private String curMacAddress;
-    // 当前是否有笔连接，如有连接可以跳过进入答题页面绑笔的弹窗
-    private String userId;
+    private String curMacAddress=null;
+
     // 选择试卷的id
     private String paperid;
 
@@ -39,13 +37,6 @@ public class MyApp extends Application {
         instance = this;
     }
 
-    public List<String> getBindedMacAddresses() {
-        return bindedMacAddresses;
-    }
-
-    public void setBindedMacAddresses(List<String> bindedMacAddresses) {
-        this.bindedMacAddresses = bindedMacAddresses;
-    }
 
     public String getCurMacAddress() {
         return curMacAddress;
@@ -55,20 +46,14 @@ public class MyApp extends Application {
         this.curMacAddress = curMacAddress;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+
+
+    // 判断当前是否连接好蓝牙笔
+    public boolean isBLEConnected(){
+        return this.curMacAddress!=null;
     }
 
-    public String getUserId() {
-        return this.userId;
-    }
 
-
-
-
-    public void removeBindedPenMacAddress(String macAddress){
-        this.bindedMacAddresses.remove(macAddress);
-    }
 
     public String getPaperid() {
         return paperid;

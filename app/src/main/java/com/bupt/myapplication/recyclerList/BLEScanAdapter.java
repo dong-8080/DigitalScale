@@ -14,7 +14,7 @@ import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bbb.bpen.command.BiBiCommand;
-import com.bupt.myapplication.GlobalVars;
+import com.bupt.myapplication.MyApp;
 import com.bupt.myapplication.R;
 
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class BLEScanAdapter extends RecyclerView.Adapter<BLEScanAdapter.ViewHold
         holder.textView.setText(macAddress);
         //TODO:动态变色
         //holder.itemView.setBackgroundResource(R.drawable.bubble_background);
-        if (macAddress.equals(GlobalVars.getInstance().getGlobalAddr())) {
+        if (macAddress.equals(MyApp.getInstance().getCurMacAddress())) {
             ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
             animator.setDuration(1000);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

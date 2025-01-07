@@ -7,8 +7,9 @@ import java.util.List;
 // 上传到服务器对应的对象
 public class UploadStrokeObject {
     private String scalesSetRecordId;
-
     private String penMac;
+    private String uploadTime;
+    private List<List<StrokePoint>> strokesList;
 
     public String getScalesSetRecordId() {
         return scalesSetRecordId;
@@ -42,7 +43,5 @@ public class UploadStrokeObject {
         this.strokesList = strokesList;
     }
 
-    private String uploadTime;
 
-    private List<List<StrokePoint>> strokesList;
 }

@@ -10,7 +10,6 @@ import com.bbb.bpen.command.BiBiCommand;
 import com.bbb.bpen.delegate.BlueDelegate;
 import com.bbb.bpen.model.Pen;
 import com.bbb.bpen.model.PointData;
-import com.bupt.myapplication.GlobalVars;
 import com.bupt.myapplication.MyApp;
 import com.bupt.myapplication.data.PointManager;
 import com.bupt.myapplication.data.StrokeManager;
@@ -27,7 +26,6 @@ public class BlueDelegateImpl implements BlueDelegate {
     private DrawingView dw;
     private BLEScanManager bleScanManager;
 
-    private boolean isConnected = false;
 
 
     private MainDialogFragment myDialogFragment = null;
@@ -68,7 +66,7 @@ public class BlueDelegateImpl implements BlueDelegate {
         Log.e(TAG, "didConnect, status:" + status + " newState:" + newState);
         Log.e(TAG, "didConnect, device mac:" + device.getAddress());
         this.connectedAddress = device.getAddress();
-        GlobalVars.getInstance().setGlobalAddr(this.connectedAddress);
+        MyApp.getInstance().setCurMacAddress(this.connectedAddress);
 
         try {
             BiBiCommand.stopscan(dw.getContext());
@@ -81,7 +79,7 @@ public class BlueDelegateImpl implements BlueDelegate {
             public void run() {
                 Toast.makeText(MyApp.getInstance(), "连接蓝牙笔成功", Toast.LENGTH_LONG).show();
                 myDialogFragment.changeColor(connectedAddress);
-                isConnected = true;
+
             }
         });
     }

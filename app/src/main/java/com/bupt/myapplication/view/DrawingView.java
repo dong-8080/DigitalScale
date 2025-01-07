@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Random;
 
 // 自定义画图控件
+// 映射出所有的笔迹，无需改动
 public class DrawingView extends View implements Serializable {
 
     Paint mDrawpaint;

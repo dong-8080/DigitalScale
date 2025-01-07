@@ -78,6 +78,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.Response;
+
 public class MainActivity extends AppCompatActivity {
     // import custom drawing view
     private static final int PERMISSION_REQUEST_CODE = 200;
@@ -278,9 +280,10 @@ public class MainActivity extends AppCompatActivity {
                 uploadDialogFragment = new ReuploadDialogFragment();
                 uploadDialogFragment.show(getSupportFragmentManager(), "dialog");
             } else if (id == R.id.history) {
-                Toast.makeText(this, "功能暂未实现", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "功能暂未实现，敬请期待", Toast.LENGTH_SHORT).show();
             } else if (id == R.id.bluetooth_connect) {
-                dialogFragment.show(getSupportFragmentManager(), "dialog");
+//                dialogFragment.show(getSupportFragmentManager(), "dialog");
+                Toast.makeText(this, "功能暂未实现，敬请期待", Toast.LENGTH_SHORT).show();
             } else if (id == R.id.toolbox) {
                 toolbox();
                 return true;
@@ -640,10 +643,12 @@ public class MainActivity extends AppCompatActivity {
 
         // 曹安棋本地上传 2024/12/20
         // 转换为json字符串储存
-        String example_str = StringUtils.readRawJsonFile(MainActivity.this, R.raw.example_strokes);
-        Log.e("example", example_str+"");
+//        String example_str = StringUtils.readRawJsonFile(MainActivity.this, R.raw.example_strokes);
+//        Log.e("example", example_str+"");
 
-        String url = "http://10.129.138.61:8080/scalesSetRecords/androidUpload";
+        String url = "http://10.160.8.130:8080/scalesSetRecords/androidUpload";
+
+        // 被试ID、笔ID、时间、笔迹
         UploadStrokeObject uploadStroke = new UploadStrokeObject();
         uploadStroke.setScalesSetRecordId(MyApp.getInstance().getParticipantID());
         uploadStroke.setPenMac(MyApp.getInstance().getCurMacAddress());
@@ -653,38 +658,50 @@ public class MainActivity extends AppCompatActivity {
         uploadStroke.setStrokesList(strokes_list);
         Gson gson = new Gson();
 
-        String json = gson.toJson(uploadStroke);
-        JsonArray jsonArray = new JsonArray();
-        jsonArray.add(json);
+        List<UploadStrokeObject> uploadList = new ArrayList<>();
+        uploadList.add(uploadStroke);
+        // 转换成json数组提交，后端格式要求
+        String json_str = gson.toJson(uploadList);
+//        JsonArray jsonArray = new JsonArray();
+//        jsonArray.add(json);
+//
+//        String json_str = gson.toJson(jsonArray);
+        Log.e("HTTP", json_str);
 
-        String json_str = gson.toJson(jsonArray);
 
         OkHttpUtils.getInstance().postAsync(url, json_str, new OkHttpUtils.Callback() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(Response response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (response.contains("200")) {
+//                        if (response.contains("200")) {
+                        if (response.code() == 200){
                             // 提交成功重新开始
                             // 清除存储的待上传笔迹、页面存储笔迹以及初始化笔迹
                             StrokeManager.getInstance().clearAll();
                             MyApp.getInstance().setPaperid(null);
+                            MyApp.getInstance().setParticipantID(null);
                             PointManager.getInstance().clear();
+
+                            // 弹出新的页面，开始新一次作答
                             dw.initDraw();
+                            dialogFragment = new MainDialogFragment();
+                            blueDelegate = new BlueDelegateImpl(dw, dialogFragment);
+                            dialogFragment.show(getSupportFragmentManager(), "dialog");
+
                             View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.layout_upload_success, null);
                             Toast toast = new Toast(MainActivity.this);
                             toast.setView(view);
                             toast.setDuration(Toast.LENGTH_SHORT);
                             toast.show();
 
-                            Log.e("Response", response);
-
+                            Log.e("Response", response.body().toString());
                         } else {
                             // 未知错误，需要针对每个的情况进行判断处理
                             // 出现重定向错误，检查网络连接  提前弹窗确认下
                             Log.e("HTTP",  "上传数据出现未知错误");
-                            Log.e("HTTP", response + "");
+                            Log.e("HTTP", response.body().toString() + "");
                             uploadFailed(json_str, timString);
                         }
                     }
@@ -698,26 +715,53 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+    // 提交失败的时候，本地存储一下。失败的数据都存
     public void uploadFailed(String json_str, String timString){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.layout_upload_failed, null);
-                Toast toast = new Toast(MainActivity.this);
-                toast.setView(view);
-                toast.setDuration(Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-//                                            UndoButtonUnEnabled();
-                saveDataToLocal(json_str, timString);//本地存储
-                //Log.e("debug", "ok");
+                // 错误标识
+//                View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.layout_upload_failed, null);
+//                Toast toast = new Toast(MainActivity.this);
+//                toast.setView(view);
+//                toast.setDuration(Toast.LENGTH_SHORT);
+//                toast.setGravity(Gravity.CENTER, 0, 0);
+//                toast.setGravity(Gravity.CENTER, 0, 0);
+//                toast.show();
 
-                // 清除存储的待上传笔迹、页面存储笔迹以及初始化笔迹
-                StrokeManager.getInstance().clearAll();
-                MyApp.getInstance().setPaperid(null);
-                PointManager.getInstance().clear();
-                dw.initDraw();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setTitle("数据上传提示");
+                        builder.setMessage("数据上传失败，已将数据保存至本地。");
+//                        builder.setPositiveButton("确定", (dialog, which) -> dialog.dismiss());
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                saveDataToLocal(json_str, timString);//本地存储
+                                //Log.e("debug", "ok");
+
+                                // 清除存储的待上传笔迹、页面存储笔迹以及初始化笔迹
+                                StrokeManager.getInstance().clearAll();
+                                MyApp.getInstance().setPaperid(null);
+                                MyApp.getInstance().setParticipantID(null);
+                                PointManager.getInstance().clear();
+
+                                // 弹出新的页面，开始新一次作答
+                                dw.initDraw();
+                                dialogFragment = new MainDialogFragment();
+                                blueDelegate = new BlueDelegateImpl(dw, dialogFragment);
+                                dialogFragment.show(getSupportFragmentManager(), "dialog");
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+                });
+//                                            UndoButtonUnEnabled();
+
             }
         });
     }
@@ -932,16 +976,16 @@ public class MainActivity extends AppCompatActivity {
                         for (String filename : jsonFiles) {
                             OkHttpUtils.getInstance().postAsync(url, getDataFromLocal(filename), new OkHttpUtils.Callback() {
                                 @Override
-                                public void onResponse(String response) {
+                                public void onResponse(Response response) {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            if (response.contains("200")) {
+                                            if (response.code()==200) {
                                                 deleteLocalFile(filename);
-                                                Log.e("Response", response);
+                                                Log.e("Response", response.body().toString());
                                                 ReuploadDialogFragment.Refresh();
                                             } else {
-                                                Log.e("HTTP", response + "");
+                                                Log.e("HTTP", response.body().toString() + "");
                                             }
                                             num_of_files--;
                                             if (num_of_files == 0) {
