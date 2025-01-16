@@ -1,5 +1,6 @@
 package com.bupt.myapplication;
 
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
@@ -43,13 +44,11 @@ import com.bupt.myapplication.data.StrokeManager;
 import com.bupt.myapplication.data.StrokePoint;
 import com.bupt.myapplication.dialog.MainDialogFragment;
 import com.bupt.myapplication.dialog.ReuploadDialogFragment;
-import com.bupt.myapplication.object.PostStrokeObject;
-import com.bupt.myapplication.util.StringUtils;
+
 import com.bupt.myapplication.view.DrawingView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -64,6 +63,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -93,14 +95,15 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout introductionFragmentLayout;
     private FrameLayout mmsepictureFragmentLayout;
 
+    private String TAG = "MainActivity.class";
+
     private ConstraintLayout contactUsContainer;
     public DrawingView dw;
     private ContactFragment contactFragment;
     private IntroductionFragment introductionFragment;
     private com.bupt.myapplication.fragment.mmseFragment mmseFragment;
-    private String timeStamp;
 
-    private static String TAG = "MainActivityClass";
+
 
     public Handler BLEConnectHandler;
     private DrawerLayout drawerLayout;
@@ -152,19 +155,19 @@ public class MainActivity extends AppCompatActivity {
                     contactFragmentLayout.setVisibility(View.GONE);
                     destroyFragment(contactFragment);
                 } catch (Exception e) {
-
+                    Log.e("exception", "onClick: ");
                 }
                 try {
                     introductionFragmentLayout.setVisibility(View.GONE);
                     destroyFragment(introductionFragment);
                 } catch (Exception e) {
-
+                    Log.e("exception", "onClick: ");
                 }
                 try {
                     mmsepictureFragmentLayout.setVisibility(View.GONE);
                     destroyFragment(mmseFragment);
                 } catch (Exception e) {
-
+                    Log.e("exception", "onClick: ");
                 }
             }
         });
@@ -589,9 +592,23 @@ public class MainActivity extends AppCompatActivity {
             builder.setMessage("个人信息页没有填写，请填写后提交");
             builder.setPositiveButton("关闭", null);
             builder.show();
-        }
-        else{
-            // 弹窗确认
+        } else if (uncompleted_pages.size()==0){
+            // 全部量表都完成了，提示下确认提交
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
+            builder.setTitle("提交确认");
+            String alertMsg = "请确认已完成本次评测，提交数据\n";
+            builder.setMessage(alertMsg);
+            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    submit_strokes();
+                }
+            });
+            builder.setNegativeButton("关闭", null);
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            // 说明有量表没做完，提示有量表没有做完
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
             builder.setTitle("提交确认");
             String alertMsg = "以下部分未填写，是否确认提交？\n"+msg;
@@ -662,10 +679,7 @@ public class MainActivity extends AppCompatActivity {
         uploadList.add(uploadStroke);
         // 转换成json数组提交，后端格式要求
         String json_str = gson.toJson(uploadList);
-//        JsonArray jsonArray = new JsonArray();
-//        jsonArray.add(json);
-//
-//        String json_str = gson.toJson(jsonArray);
+
         Log.e("HTTP", json_str);
 
 
@@ -721,14 +735,6 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // 错误标识
-//                View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.layout_upload_failed, null);
-//                Toast toast = new Toast(MainActivity.this);
-//                toast.setView(view);
-//                toast.setDuration(Toast.LENGTH_SHORT);
-//                toast.setGravity(Gravity.CENTER, 0, 0);
-//                toast.setGravity(Gravity.CENTER, 0, 0);
-//                toast.show();
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -740,7 +746,8 @@ public class MainActivity extends AppCompatActivity {
                         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                saveDataToLocal(json_str, timString);//本地存储
+                                String fileName = MyApp.getInstance().getParticipantID() + "_" + timString;
+                                saveDataToLocal(json_str, fileName);//本地存储
                                 //Log.e("debug", "ok");
 
                                 // 清除存储的待上传笔迹、页面存储笔迹以及初始化笔迹
@@ -760,7 +767,6 @@ public class MainActivity extends AppCompatActivity {
                         dialog.show();
                     }
                 });
-//                                            UndoButtonUnEnabled();
 
             }
         });
@@ -948,82 +954,77 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public int fail_num = 0;
-    public int num_of_files = 0;
+//    public int fail_num = 0;
+//    public int num_of_files = 0;
 
+
+    // 检查上传失败的数据，重新上传
     public void Reupload(ReuploadCallback callback) {
         File externalFilesDir = getExternalFilesDir(null);
         File[] files = externalFilesDir.listFiles();
-        List<String> jsonFiles = new ArrayList<>();
-        num_of_files = 0;
-        for (File file : files) {
-            if (file.getName().endsWith(".json")) {
-                jsonFiles.add(file.getName());
-                num_of_files++;
+
+//        num_of_files = 0;
+        JSONArray jsonArrays = new JSONArray();
+        List<String> filenames = new ArrayList<>();
+        for(File file: files){
+            if (file.getName().endsWith(".json")){
+                String filename = file.getName();
+                filenames.add(filename);
+                String json_str = getDataFromLocal(file.getName());
+                try {
+                    JSONArray json_subject = new JSONArray(json_str);
+                    jsonArrays.put(json_subject.get(0));
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        String message = "发现" + num_of_files + "份未上传记录，是否重新上传";
+        String message = "确定重新上传数据";
         builder.setTitle("重新上传提示")
                 .setMessage(message)
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (num_of_files == 0) {
-                            callback.onUploadFailed();
-                        }
-                        String url = "http://ibrain.bupt.edu.cn/api/scale/insertscale";
-                        for (String filename : jsonFiles) {
-                            OkHttpUtils.getInstance().postAsync(url, getDataFromLocal(filename), new OkHttpUtils.Callback() {
-                                @Override
-                                public void onResponse(Response response) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (response.code()==200) {
-                                                deleteLocalFile(filename);
-                                                Log.e("Response", response.body().toString());
-                                                ReuploadDialogFragment.Refresh();
-                                            } else {
-                                                Log.e("HTTP", response.body().toString() + "");
-                                            }
-                                            num_of_files--;
-                                            if (num_of_files == 0) {
-                                                if (fail_num != 0) {
-                                                    Toast.makeText(MainActivity.this, fail_num + "条信息上传失败!", Toast.LENGTH_LONG).show();
-                                                    fail_num = 0;
-                                                    callback.onUploadFailed();
-                                                } else {
-                                                    Toast.makeText(MainActivity.this, "本地存储笔迹已全部上传成功", Toast.LENGTH_LONG).show();
-                                                    callback.onUploadComplete();
-                                                }
-                                            }
-                                        }
-                                    });
-                                }
 
-                                @Override
-                                public void onFailure(IOException e) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            fail_num++;
-                                            num_of_files--;
-                                            if (num_of_files == 0) {
-                                                if (fail_num != 0) {
-                                                    Toast.makeText(MainActivity.this, fail_num + "条信息上传失败!", Toast.LENGTH_LONG).show();
-                                                    fail_num = 0;
-                                                    callback.onUploadFailed();
-                                                } else {
-                                                    Toast.makeText(MainActivity.this, "本地存储笔迹已全部上传成功", Toast.LENGTH_LONG).show();
-                                                    callback.onUploadComplete();
-                                                }
+                        String url = "http://10.160.8.130:8080/scalesSetRecords/androidUpload";
+                        OkHttpUtils.getInstance().postAsync(url, jsonArrays.toString(), new OkHttpUtils.Callback() {
+                            @Override
+                            public void onResponse(Response response) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (response.code()==200) {
+                                            for(String filename:filenames){
+                                                deleteLocalFile(filename);
                                             }
+                                            Toast.makeText(MainActivity.this, "本地存储笔迹已全部上传成功", Toast.LENGTH_LONG).show();
+                                            callback.onUploadComplete();
+                                            Log.e("Response", response.body().toString());
+                                            ReuploadDialogFragment.Refresh();
+                                        } else {
+                                            Log.e("Response", response.body().toString() + "");
+                                            Toast.makeText(MainActivity.this,   "本地存储数据上传失败!", Toast.LENGTH_LONG).show();
+                                            callback.onUploadFailed();
                                         }
-                                    });
-                                }
-                            });
-                        }
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailure(IOException e) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(MainActivity.this,   "本地存储数据上传失败!", Toast.LENGTH_LONG).show();
+                                        callback.onUploadFailed();
+                                        Log.e("Response", e.toString() + "");
+
+                                    }
+                                });
+                            }
+                        });
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -1031,8 +1032,17 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         callback.onUploadFailed();
                     }
-                })
-                .show();
+                });
+
+        // 当有存储数据的时候，才可以展示弹窗
+        if (filenames.size()>0){
+            builder.show();
+        }else {
+            Toast.makeText(MainActivity.this, "当前没有数据可以上传", Toast.LENGTH_SHORT).show();
+        }
+
+
+
     }
 
     private void replaceFragment(Fragment fragment) {
