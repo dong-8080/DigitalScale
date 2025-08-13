@@ -87,9 +87,11 @@ public class BlueDelegateImpl implements BlueDelegate {
     @Override
     public void notifyBattery(int battery) {}
 
+
     // 绘图重要函数
     @Override
-    public void notifyRealTimePointData(List<PointData> pointDrawArray) {
+    public void notifyRealTimePointData(List<PointData> pointDrawArray, int i) {
+
         PointManager.getInstance().addPointToList(pointDrawArray);
 
         // 仅从最后一个点触发点击相关的广播事件

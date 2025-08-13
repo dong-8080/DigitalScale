@@ -4,7 +4,6 @@ import com.bupt.myapplication.data.StrokePoint;
 
 import java.util.List;
 
-// 上传到服务器对应的对象
 public class UploadStrokeObject {
     private String scalesSetRecordId;
     private String penMac;

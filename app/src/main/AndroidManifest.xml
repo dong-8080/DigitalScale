@@ -17,6 +17,7 @@
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+
     <!--禁止息屏-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
