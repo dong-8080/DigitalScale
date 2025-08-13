@@ -2,6 +2,7 @@ package com.bupt.myapplication.dialog;
 
 import static java.lang.Thread.sleep;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,6 +38,8 @@ import com.bupt.myapplication.R;
 import com.bupt.myapplication.recyclerList.BLEScanAdapter;
 import com.bupt.myapplication.recyclerList.BLEScanManager;
 import com.bupt.myapplication.recyclerList.BLEScanObserver;
+import com.bupt.myapplication.view.EditableSequenceView;
+import com.bupt.myapplication.view.EditableSequenceViewXW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +50,10 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
     private LinearLayout linearLayout1, linearLayout2, linearLayout3;
     private Button button1, button2, button3, button_scan;
 
-    private EditText editTextS1, editTextS2;
-    private EditText editTextX1, editTextX2, editTextX3, editTextX4;
-    private EditText editTextYear1, editTextYear2;
-    private EditText editTextMonth1, editTextMonth2;
 
+    // TODO: XUANWU 使用，此处替换
+//    private EditableSequenceViewXW editableSequenceView;
+    private EditableSequenceView editableSequenceView;
     private String participantId;
 
     private RecyclerView recyclerView;
@@ -69,14 +71,12 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         // 创建一个对话框并返回
         Dialog dialog = new Dialog(requireContext(), getTheme());
-        // 设置对话框外部点击无法取消
-//        if(GlobalVars.getInstance().getOpened() == false){
-//            dialog.setCanceledOnTouchOutside(false);
-//        }
+
         dialog.setCanceledOnTouchOutside(false);
         return dialog;
     }
 
+    @SuppressLint("MissingInflatedId")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -93,6 +93,7 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
         button3 = view.findViewById(R.id.button3);
         button_scan = view.findViewById(R.id.button_scan);
 
+        editableSequenceView = view.findViewById(R.id.editableSequenceView);
         // 设置按钮点击事件
         // 跳转到被试编号填写界面
         button1.setOnClickListener(v -> showFragment2());
@@ -105,10 +106,7 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
             @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View view) {
-                participantId = "HEAD_S" + editTextS1.getText() + editTextS2.getText() + "_00" +
-                        editTextX1.getText() + editTextX2.getText() + editTextX3.getText() + editTextX4.getText() +
-                        "_20" + editTextYear1.getText() + editTextYear2.getText() + editTextMonth1.getText() +
-                        editTextMonth2.getText();
+                participantId = editableSequenceView.getText();
                 Log.e("HEAD", "onClick: " + participantId.length() + participantId);
 
                 if (participantId.length() == 22) {
@@ -162,29 +160,6 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
         bleScanAdapter = new BLEScanAdapter(data);
         recyclerView.setAdapter(bleScanAdapter);
 
-        editTextS1 = view.findViewById(R.id.editTextS1);
-        editTextS2 = view.findViewById(R.id.editTextS2);
-        editTextX1 = view.findViewById(R.id.editTextX1);
-        editTextX2 = view.findViewById(R.id.editTextX2);
-        editTextX3 = view.findViewById(R.id.editTextX3);
-        editTextX4 = view.findViewById(R.id.editTextX4);
-        editTextYear1 = view.findViewById(R.id.editTextYear1);
-        editTextYear2 = view.findViewById(R.id.editTextYear2);
-        editTextMonth1 = view.findViewById(R.id.editTextMonth1);
-        editTextMonth2 = view.findViewById(R.id.editTextMonth2);
-
-        setupEditText(editTextS1, editTextS2, null);
-        setupEditText(editTextS2, editTextX1, editTextS1);
-        setupEditText(editTextX1, editTextX2, editTextS2);
-        setupEditText(editTextX2, editTextX3, editTextX1);
-        setupEditText(editTextX3, editTextX4, editTextX2);
-        setupEditText(editTextX4, editTextYear1, editTextX3);
-        setupEditText(editTextYear1, editTextYear2, editTextX4);
-        setupEditText(editTextYear2, editTextMonth1, editTextYear1);
-        setupEditText(editTextMonth1, editTextMonth2, editTextYear2);
-        setupEditText(editTextMonth2, null, editTextMonth1);
-
-
         bleScanAdapter.notifyDataSetChanged();  // 用于刷新recyclerView,也就是每次修改bleScanAdapter中的list，就要调用这个函数刷新一下
 
 
@@ -193,53 +168,6 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
 
         checkNetwork();
         return view;
-    }
-
-    private void setupEditText(final EditText current, final EditText next, final EditText prev) {
-        current.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 1 && next != null) {
-                    next.requestFocus();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        current.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DEL) {
-                    if (current.getText().length() == 1 && prev != null) {
-                        prev.requestFocus();
-                        current.setText("");
-                        return true;
-                    } else if (current.getText().length() == 0 && prev == null) {
-                        return true; // For the first EditText, do nothing on backspace
-                    }
-                }
-                return false;
-            }
-        });
-
-        // Handle the case where the next EditText is not empty
-        final EditText finalNext = next;
-        current.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && finalNext != null && finalNext.getText().toString().trim().length() > 0) {
-                    // If the next EditText is not empty, we clear it to prepare for the new input
-                    finalNext.setText("");
-                }
-            }
-        });
     }
 
 

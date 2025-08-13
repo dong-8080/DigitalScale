@@ -1,6 +1,7 @@
 package com.bupt.myapplication.view;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -87,8 +88,11 @@ public class DrawingView extends View implements Serializable {
         Log.e("BACKGROUND", "load empty image");
 
         background = BitmapFactory.decodeResource(getResources(), R.drawable.drawing_background_init, options);
+
         return background;
     }
+
+
 
     public void initDraw() {
         //初始化画笔
@@ -125,42 +129,63 @@ public class DrawingView extends View implements Serializable {
 
         background = get_drawing_background(pageID);
 
-        // 此处screenWidth=1200
+//        // 此处screenWidth=1200
+//        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+//        Log.e("TAG", "screenWidth:"+screenWidth);
+//
+//        // background width and height
+//        int newWidth = screenWidth;
+//        int newHeight = (int) (background.getHeight() * ((float) newWidth / background.getWidth()));
+//
+//        bitmap = Bitmap.createScaledBitmap(background, newWidth, newHeight, false);
+//
+//        mCanvas = new Canvas(bitmap);
+//
+//        page_width_forscreen = newWidth;
+//        page_height_forscreen = newHeight;
+        // 获取屏幕宽高
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        Log.e("TAG", "screenWidth:"+screenWidth);
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
 
-        // background width and height
-        int newWidth = screenWidth;
-        int newHeight = (int) (background.getHeight() * ((float) newWidth / background.getWidth()));
+        // 获取状态栏高度
+        int statusBarHeight = 0;
+        int resId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resId > 0) {
+            statusBarHeight = getResources().getDimensionPixelSize(resId);
+        }
 
-        bitmap = Bitmap.createScaledBitmap(background, newWidth, newHeight, false);
+        // 获取 toolbar 高度（尝试获取实际高度，否则默认 56dp）
+        int toolbarHeight = 0;
+        View toolbar = ((Activity) context).findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbarHeight = toolbar.getHeight();
+            if (toolbarHeight == 0) {
+                toolbarHeight = (int) (56 * getResources().getDisplayMetrics().density); // fallback
+            }
+        } else {
+            toolbarHeight = (int) (56 * getResources().getDisplayMetrics().density); // fallback
+        }
+
+        // 计算可用高度（不被遮挡的区域）
+        int availableHeight = screenHeight - statusBarHeight - toolbarHeight;
+
+        // 计算缩放因子，按“屏幕可用宽高”和“图片原始尺寸”进行比例计算
+        float scaleW = (float) screenWidth / background.getWidth();
+        float scaleH = (float) availableHeight / background.getHeight();
+
+        // 按照较小比例等比缩放，确保图片完整显示
+        float scale = Math.min(scaleW, scaleH);
+
+        // 计算缩放后的宽高
+        int newWidth = (int) (background.getWidth() * scale);
+        int newHeight = (int) (background.getHeight() * scale);
+
+        bitmap = Bitmap.createScaledBitmap(background, newWidth, newHeight, true);
         mCanvas = new Canvas(bitmap);
 
+        // 存储缩放后尺寸用于笔迹转换
         page_width_forscreen = newWidth;
         page_height_forscreen = newHeight;
-
-//        float factor = 1800/2114;
-//
-//        // TODO: 绘制辅助框
-//        if (pageID!=null) {
-//            List<CenterPoint> centerPoints = PagePointManager.getInstance().getCenterPoints(pageID);
-//            for (CenterPoint centerPoint : centerPoints) {
-//                float x = Float.parseFloat(centerPoint.getX());
-//                float y = Float.parseFloat(centerPoint.getY());
-//                float width = Float.parseFloat(centerPoint.getWidth());
-//
-//                Log.e("TAG", "center x:" + x + "center y"+ y + "screenWidth"+ screenWidth);
-//
-//                float left = (x-width/2)*factor;
-//                float top = (y-width/2)*factor;
-//                float right = (x+width/2)*factor;
-//                float bottom = (y-width/2)*factor;
-//
-//
-//                mCanvas.drawRect(left, top,right, bottom, mDrawpaint);
-//            }
-//        }
-
 
         // 画此页面已存在的历史记录
         if (pageID != null) {
@@ -355,9 +380,25 @@ public class DrawingView extends View implements Serializable {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawBitmap(bitmap, 0, 0, null);
-        // 测试后删除
-        canvas.drawText(text, 80, 80, mTextpaint);
+//        canvas.drawBitmap(bitmap, 0, 0, null);
+//        // 测试后删除
+//        canvas.drawText(text, 80, 80, mTextpaint);
+//        invalidate();
+
+        if (bitmap != null) {
+            int canvasWidth = canvas.getWidth();
+            int canvasHeight = canvas.getHeight();
+
+            int bitmapWidth = bitmap.getWidth();
+            int bitmapHeight = bitmap.getHeight();
+
+            // 计算居中偏移量
+            int offsetX = (canvasWidth - bitmapWidth) / 2;
+            int offsetY = (canvasHeight - bitmapHeight) / 2;
+
+            // 在画布上居中绘制背景图
+            canvas.drawBitmap(bitmap, offsetX, offsetY, null);
+        }
         invalidate();
 
     }

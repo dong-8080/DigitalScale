@@ -1,6 +1,7 @@
 package com.bupt.myapplication.util;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -15,7 +16,11 @@ public class OkHttpUtils {
     private OkHttpClient client;
     // 私有构造函数
     private OkHttpUtils() {
-        client = new OkHttpClient();
+        client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)   // 连接超时：30s
+                .readTimeout(120, TimeUnit.SECONDS)     // 读取响应超时：120s
+                .writeTimeout(120, TimeUnit.SECONDS)    // 写入请求体超时：120s
+                .build();
     }
 
     // 公开获取实例的方法
@@ -40,10 +45,10 @@ public class OkHttpUtils {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    callback.onFailure(new IOException("Unexpected code " + response));
-                    return;
-                }
+//                if (!response.isSuccessful()) {
+//                    callback.onFailure(new IOException("Unexpected code " + response));
+//                    return;
+//                }
 
                 callback.onResponse(response);
             }
@@ -69,10 +74,10 @@ public class OkHttpUtils {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    callback.onFailure(new IOException("Unexpected code " + response));
-                    return;
-                }
+//                if (!response.isSuccessful()) {
+//                    callback.onFailure(new IOException("Unexpected code " + response));
+//                    return;
+//                }
 
                 callback.onResponse(response);
             }

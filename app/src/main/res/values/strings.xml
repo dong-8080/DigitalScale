@@ -20,7 +20,7 @@
     <string name="toolbar_title">主页</string>
 
     <string name="menu_instruction">使用说明</string>
-    <string name="menu_contact_us">联系我们</string>
+    <string name="menu_contact_us">关于我们</string>
 
     <string name="menu_history">历史作答记录</string>
     <string name="menu_to_be_upload">待上传</string>

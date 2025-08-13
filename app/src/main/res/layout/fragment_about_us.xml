@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:colorBackground"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tv_about_us_title_popup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="关于我们"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:textColor="?attr/colorOnSurface" />
+
+            <ImageButton
+                android:id="@+id/btn_close_about_us"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="关闭" />
+        </RelativeLayout>
+
+        <!-- 团队介绍卡片 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_team_intro_popup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:background="?attr/colorPrimary"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:id="@+id/tv_team_intro_title_popup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="项目与团队介绍"
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                <TextView
+                    android:id="@+id/tv_team_intro_content_popup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="北京邮电大学脑认知与智能医学中心支撑北京邮电大学“智能+医学+X”交叉学科建设，是学校智能医学工程专业建设的重要团队。目前中心有教授/研究员4人，副教授/副研究员5人，讲师2人，工程师2人，博士后2人。80%教学科研人员有在剑桥大学、加州大学旧金山分校、杜克大学、印第安纳大学、荷兰阿姆斯特丹自由大学、澳大利亚昆士兰大学、新西兰奥克兰大学留学访问经历等。\n\n中心依托以3.0T磁共振为核心设备建立了具有一流软硬件设施的北邮智能医学平台，围绕脑认知原理解析、认知障碍相关重大脑疾病早期智能识别技术、儿童青少年脑智发育、新型无创脑机接口等研究方向，开展了一系列具有北邮特色的“信、医、工”交叉融合的前沿科学研究。"
+                    android:textAppearance="?attr/textAppearanceBody1"
+                    android:lineSpacingMultiplier="1.2"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- 项目负责人卡片 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_project_lead_popup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:background="?attr/colorPrimary"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:id="@+id/tv_project_lead_title_popup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="项目负责人"
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                <TextView
+                    android:id="@+id/tv_project_lead_name_popup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="刘勇 教授"
+                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/tv_project_lead_details_popup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="北京邮电大学人工智能学院副院长，研究以脑影像为核心技术手段，以脑影像在重大神经精神疾病中的应用为导向展开。研究工作以探究多中心、多模态脑影像计算方法及AD的影像异常表征为核心，以期发现AD早期识别脑影像标记。代表性结果为：基于多中心、大样本发现了AD等在脑结构和脑功能上具有高敏感性、高特异性和泛化性的脑异常表征，为AD早期诊断提供理论依据和预后判断的客观评价指标。"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:lineSpacingMultiplier="1.2"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- 联系与关注卡片 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_contact_follow_popup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:background="?attr/colorPrimary"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:id="@+id/tv_contact_title_popup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="联系与关注"
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                <TextView
+                    android:id="@+id/tv_wechat_id_popup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="微信公众号: CAIMI"
+                    android:textAppearance="?attr/textAppearanceBody1"/>
+
+                 <ImageView
+                    android:id="@+id/iv_qr_code_popup"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:src="@drawable/qr_code"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="微信公众号二维码"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

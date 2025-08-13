@@ -26,8 +26,6 @@ public class BlueDelegateImpl implements BlueDelegate {
     private DrawingView dw;
     private BLEScanManager bleScanManager;
 
-
-
     private MainDialogFragment myDialogFragment = null;
 
     private String connectedAddress = "";
@@ -55,18 +53,18 @@ public class BlueDelegateImpl implements BlueDelegate {
     // 接收到消息时得全局存储消息，以确定蓝牙笔是否连接
     @Override
     public void didDisconnect(Pen device, int status, int newState) {
-        MyApp.getInstance().setCurMacAddress(null);
-
+        MyApp.getInstance().BLEDisConnected();
         Log.e(TAG, "didDisconnect, status:" + status + " newState:" + newState);
     }
 
     @Override
     public void didConnect(Pen device, int status, int newState) {
-        MyApp.getInstance().setCurMacAddress(device.getAddress());
+
         Log.e(TAG, "didConnect, status:" + status + " newState:" + newState);
         Log.e(TAG, "didConnect, device mac:" + device.getAddress());
         this.connectedAddress = device.getAddress();
-        MyApp.getInstance().setCurMacAddress(this.connectedAddress);
+        MyApp.getInstance().setCurMacAddress(device.getAddress());
+        MyApp.getInstance().BLEDidConnected();
 
         try {
             BiBiCommand.stopscan(dw.getContext());
@@ -87,9 +85,11 @@ public class BlueDelegateImpl implements BlueDelegate {
     @Override
     public void notifyBattery(int battery) {}
 
+
     // 绘图重要函数
     @Override
-    public void notifyRealTimePointData(List<PointData> pointDrawArray) {
+    public void notifyRealTimePointData(List<PointData> pointDrawArray, int i) {
+
         PointManager.getInstance().addPointToList(pointDrawArray);
 
         // 仅从最后一个点触发点击相关的广播事件
