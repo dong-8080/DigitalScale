@@ -90,42 +90,6 @@ public class BackgroundLoader {
         return cacheFile.exists();
     }
 
-//    private void pendingForImage(String pageIdD, String cache_filename) {
-//        String url = HttpUtil.API + "getbackgroundimg";
-//
-//        RequestBGImage req = new RequestBGImage(pageIdD);
-//
-//        Gson gson = new Gson();
-//        RequestBody requestBody = RequestBody.create(
-//                MediaType.parse("application/json"),
-//                gson.toJson(req)
-//        );
-//        HttpUtil httpUtil = HttpUtil.getInstance();
-//        httpUtil.postRequest(url, requestBody, new HttpUtil.OkHttpCallback() {
-//            @Override
-//            public String onResponse(String response) {
-//                Gson gson = new Gson();
-//                ResponseBGImage responseObject = gson.fromJson(response, ResponseBGImage.class);
-//
-////                String toastMessage = responseObject.getMsg();
-//                String backgroundUrl = responseObject.getData();
-//                Log.e("BACKGROUND", "background:"+backgroundUrl);
-//                if (!backgroundUrl.startsWith("http")) {
-//                    backgroundUrl = "https://" + backgroundUrl;
-//                }
-//                cacheFile(cache_filename, backgroundUrl);
-//
-//                return backgroundUrl;
-//            }
-//
-//            @Override
-//            public void onFailure(IOException e) {
-//                Log.e("HTTPTEST", "onFailure");
-//                Log.e("HTTPTEST", e.toString());
-//            }
-//        });
-//    }
-
     private void cacheFile(String cache_filename, String imageUrl) {
         File storageDir = context.getCacheDir(); // 获取应用的缓存目录
         File imageFile = new File(storageDir, cache_filename);

@@ -1,8 +1,14 @@
 package com.bupt.myapplication;
 
 
+import static com.bupt.myapplication.util.JsonUtil.deleteLocalFile;
+import static com.bupt.myapplication.util.JsonUtil.getDataFromLocal;
+import static com.bupt.myapplication.util.JsonUtil.saveDataToLocal;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +17,7 @@ import android.content.ServiceConnection;
 
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -57,6 +64,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -85,6 +93,7 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
     // import custom drawing view
     private static final int PERMISSION_REQUEST_CODE = 200;
+    private static final String CHANNEL_ID = "global_exceptions";
 
     private MainDialogFragment dialogFragment;
     private ReuploadDialogFragment uploadDialogFragment;
@@ -102,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
     private ContactFragment contactFragment;
     private IntroductionFragment introductionFragment;
     private com.bupt.myapplication.fragment.mmseFragment mmseFragment;
-
 
 
     public Handler BLEConnectHandler;
@@ -123,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         setContentView(R.layout.activity_main);
         //设置 Activity 的布局文件为 activity_main.xml
@@ -413,7 +420,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     //间隔十秒扫描一次
     private BluetoothLEService service = null;
     private ServiceConnection coon = new ServiceConnection() {
@@ -487,7 +493,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     // 旧方法，测试完成后删除
-    public boolean confirm_submit_old(){
+    public boolean confirm_submit_old() {
         // 数据上传操作
         String message = "个人信息未填写完整，请检查个人信息后再次上传";
         List<List<StrokePoint>> strokes_list = StrokeManager.getInstance().getALL();//获取所有笔迹数据
@@ -548,7 +554,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.setTitle("上传提示");
                 message += "您已完成全部作答，是否继续上传";
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             // Todo: Fix above bug
             builder.setTitle("上传提示");
             message += "您已完成全部作答，是否继续上传";
@@ -571,106 +577,90 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 检查量表是否做完，弹出弹框展示是否需要上传数据
-    public void confirm_submit(){
-        // 判定是否允许提交
-        Map<String, String> uncompleted_pages = getUnCompletedPages();
-        String msg = "";
-        boolean profile_completed = true;
-        for (Map.Entry<String, String> entry : uncompleted_pages.entrySet()) {
-            String short_name = entry.getKey();
-            String full_name = entry.getValue();
-            msg = msg + full_name + " ";
-            if (short_name.equals("PROFILE")){
-                profile_completed = false;
+    // TODO:XUANWU
+    public void confirm_submit() {
+//        // 判定是否允许提交
+//        Map<String, String> uncompleted_pages = getUnCompletedPages();
+//        String msg = "";
+//        boolean profile_completed = true;
+//        for (Map.Entry<String, String> entry : uncompleted_pages.entrySet()) {
+//            String short_name = entry.getKey();
+//            String full_name = entry.getValue();
+//            msg = msg + full_name + " ";
+//            if (short_name.equals("PROFILE")) {
+//                profile_completed = false;
+//            }
+//        }
+//
+//        // 如果个人信息页没有填写不允许提交
+//        if (!profile_completed) {
+//            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
+//            builder.setTitle("上传提示");
+//            builder.setMessage("个人信息页没有填写，请填写后提交");
+//            builder.setPositiveButton("关闭", null);
+//            builder.show();
+//        } else if (uncompleted_pages.size() == 0) {
+//            // 全部量表都完成了，提示下确认提交
+//            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
+//            builder.setTitle("提交确认");
+//            String alertMsg = "请确认已完成本次评测，提交数据\n";
+//            builder.setMessage(alertMsg);
+//            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int id) {
+//                    submit_strokes();
+//                }
+//            });
+//            builder.setNegativeButton("关闭", null);
+//
+//            AlertDialog dialog = builder.create();
+//            dialog.show();
+//        } else {
+//            // 说明有量表没做完，提示有量表没有做完
+//            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
+//            builder.setTitle("提交确认");
+//            String alertMsg = "以下部分未填写，是否确认提交？\n" + msg;
+//            builder.setMessage(alertMsg);
+//            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int id) {
+//                    submit_strokes();
+//                }
+//            });
+//            builder.setNegativeButton("关闭", null);
+//
+//            AlertDialog dialog = builder.create();
+//            dialog.show();
+//        }
+
+        // 量表版本过多了, 不在提示缺失的量表页了
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
+        builder.setTitle("提交确认");
+        String alertMsg = "请确认已完成本次评测，提交数据\n";
+        builder.setMessage(alertMsg);
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                submit_strokes();
             }
-        }
+        });
+        builder.setNegativeButton("关闭", null);
 
-        // 如果个人信息页没有填写不允许提交
-        if (!profile_completed){
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
-            builder.setTitle("上传提示");
-            builder.setMessage("个人信息页没有填写，请填写后提交");
-            builder.setPositiveButton("关闭", null);
-            builder.show();
-        } else if (uncompleted_pages.size()==0){
-            // 全部量表都完成了，提示下确认提交
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
-            builder.setTitle("提交确认");
-            String alertMsg = "请确认已完成本次评测，提交数据\n";
-            builder.setMessage(alertMsg);
-            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    submit_strokes();
-                }
-            });
-            builder.setNegativeButton("关闭", null);
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        } else {
-            // 说明有量表没做完，提示有量表没有做完
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
-            builder.setTitle("提交确认");
-            String alertMsg = "以下部分未填写，是否确认提交？\n"+msg;
-            builder.setMessage(alertMsg);
-            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    submit_strokes();
-                }
-            });
-            builder.setNegativeButton("关闭", null);
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        }
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 
-
     // 向后端提交全部数据，并初始化
-    public void submit_strokes(){
+    public void submit_strokes() {
         List<List<StrokePoint>> strokes_list = StrokeManager.getInstance().getALL();//获取所有笔迹数据
 
-        // Jingrixing版本需要存放在本地，暂时不上传至服务器
-//        if (MyApp.getInstance().getScale_name()=="Jingrixing"){
-//
-//            save_to_txt_jingrixing(strokes_list);
-//            return;
-//        }
-
-        // 迟航民需要的数据上传
-//        String url = "http://ibrain.bupt.edu.cn/api/scale/insertscale";
-//        String url = "http://10.129.138.61:8080/strokes-records";
-//        PostStrokeObject object = new PostStrokeObject();
-//        object.setJson(strokes_list);
-//        LocalDateTime now = LocalDateTime.now();
-//        String timString = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-//        object.setTim(timString);
-//        object.setPenId(GlobalVars.getInstance().getGlobalAddr());
-//
-//        // 测试
-//        object.setPatientId("1234567");
-//        timeStamp = String.valueOf(System.currentTimeMillis());
-//        object.setTimeStamp(timeStamp);
-//        Gson gson = new Gson();
-//        String json_str = gson.toJson(object);
-//        Log.e("HTTP", "提交数据");
-//        Log.e("HTPP", json_str);
-
-
-        // 曹安棋本地上传 2024/12/20
-        // 转换为json字符串储存
-//        String example_str = StringUtils.readRawJsonFile(MainActivity.this, R.raw.example_strokes);
-//        Log.e("example", example_str+"");
-
-        String url = "http://10.160.8.130:8080/scalesSetRecords/androidUpload";
+        // 域名 部署完成 2025/04/20
+        String url = "https://ibrain.bupt.edu.cn/scaleBackend/scalesSetRecords/androidUpload";
 
         // 被试ID、笔ID、时间、笔迹
         UploadStrokeObject uploadStroke = new UploadStrokeObject();
         uploadStroke.setScalesSetRecordId(MyApp.getInstance().getParticipantID());
         uploadStroke.setPenMac(MyApp.getInstance().getCurMacAddress());
         LocalDateTime now = LocalDateTime.now();
-            String timString = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String timString = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         uploadStroke.setUploadTime(timString);
         uploadStroke.setStrokesList(strokes_list);
         Gson gson = new Gson();
@@ -682,7 +672,6 @@ public class MainActivity extends AppCompatActivity {
 
         Log.e("HTTP", json_str);
 
-
         OkHttpUtils.getInstance().postAsync(url, json_str, new OkHttpUtils.Callback() {
             @Override
             public void onResponse(Response response) {
@@ -690,7 +679,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 //                        if (response.contains("200")) {
-                        if (response.code() == 200){
+                        if (response.code() == 200) {
                             // 提交成功重新开始
                             // 清除存储的待上传笔迹、页面存储笔迹以及初始化笔迹
                             StrokeManager.getInstance().clearAll();
@@ -714,7 +703,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             // 未知错误，需要针对每个的情况进行判断处理
                             // 出现重定向错误，检查网络连接  提前弹窗确认下
-                            Log.e("HTTP",  "上传数据出现未知错误");
+                            Log.e("HTTP", "上传数据出现未知错误");
                             Log.e("HTTP", response.body().toString() + "");
                             uploadFailed(json_str, timString);
                         }
@@ -731,7 +720,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     // 提交失败的时候，本地存储一下。失败的数据都存
-    public void uploadFailed(String json_str, String timString){
+    public void uploadFailed(String json_str, String timString) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -747,8 +736,8 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 String fileName = MyApp.getInstance().getParticipantID() + "_" + timString;
-                                saveDataToLocal(json_str, fileName);//本地存储
-                                //Log.e("debug", "ok");
+
+                                saveDataToLocal(json_str, fileName, MainActivity.this);
 
                                 // 清除存储的待上传笔迹、页面存储笔迹以及初始化笔迹
                                 StrokeManager.getInstance().clearAll();
@@ -772,11 +761,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public Map<String, String> getUnCompletedPages(){
-        // 获取当前存储的全部ID,已经做完的
-        List<Long> pageIds =  StrokeManager.getInstance().getStrokePageIDs();
 
-        for(Long id:pageIds){
+    // 有些页面不存在笔迹，标定为未完成，这里用于上传前检查哪些页面未完成，提示一下
+    public Map<String, String> getUnCompletedPages() {
+
+        // 获取当前存储的全部ID,已经做完的
+        List<Long> pageIds = StrokeManager.getInstance().getStrokePageIDs();
+
+        for (Long id : pageIds) {
             Log.e("PageID", id.toString());
         }
         // 判断量表的版本，判定页码数在v1的55240-55287之间的多，还是在V2的69135-69179的页码数量
@@ -784,28 +776,29 @@ public class MainActivity extends AppCompatActivity {
         int scale_v2_page_count = 0;
         int scale_jingrixing_count = 0;
 
-        for (long page_id: pageIds){
-            if (page_id<=55287 && page_id>=55240) {
+        for (long page_id : pageIds) {
+            if (page_id <= 55287 && page_id >= 55240) {
                 scale_v1_page_count++;
-            }else if (page_id<=69179 && page_id>=69135) {
+            } else if (page_id <= 69179 && page_id >= 69135) {
                 scale_v2_page_count++;
                 MyApp.getInstance().setScale_name("v2");
-            }else if (page_id<=74533 && page_id>=74521) {
+            } else if (page_id <= 74533 && page_id >= 74521) {
                 scale_jingrixing_count++;
             }
         }
         String scale_name_path = "";
 
 
-        if (scale_v1_page_count>scale_v2_page_count){
+        if (scale_v1_page_count > scale_v2_page_count) {
             MyApp.getInstance().setScale_name("v1");
             scale_name_path = "scale_v1.csv";
         }
-        else if (scale_v1_page_count< scale_v2_page_count){
+
+        // 这个应该是head项目中最新的，其他的无用
+        else if (scale_v1_page_count < scale_v2_page_count) {
             scale_name_path = "scale_v2.csv";
             MyApp.getInstance().setScale_name("v2");
-        }
-        else if (scale_v1_page_count==scale_v2_page_count) {
+        } else if (scale_v1_page_count == scale_v2_page_count) {
             // 按照常理来说，两部分都等于0，表示本份量表属于其他量表，即jingrixing的量表，不判定直接保存了
             scale_name_path = "scale_jingrixing.csv";
             MyApp.getInstance().setScale_name("Jingrixing");
@@ -818,25 +811,25 @@ public class MainActivity extends AppCompatActivity {
         for (CSVReaderUtil.PageMap page : pages) {
             // 处理你的数据，例如显示在UI上
             Long pageID = Long.parseLong(page.pageId);
-            if(pageIds.contains(pageID)){
-                page.completed=true;
+            if (pageIds.contains(pageID)) {
+                page.completed = true;
             }
-            String message = "Page ID: " + page.pageId + ", Short Name: " + page.shortName + ", Full Name: " + page.fullName +", completed: " + page.completed;
+            String message = "Page ID: " + page.pageId + ", Short Name: " + page.shortName + ", Full Name: " + page.fullName + ", completed: " + page.completed;
             Log.e("pagemap", message);
         }
 
         // 获取未完成页面的信息
         List<String> completed_short_name = new ArrayList<>();
-        for (CSVReaderUtil.PageMap page : pages){
+        for (CSVReaderUtil.PageMap page : pages) {
             if (page.completed) {
                 completed_short_name.add(page.shortName);
             }
         }
         Map<String, String> uncompleted_pages = new HashMap<>();
-        for (CSVReaderUtil.PageMap page: pages){
+        for (CSVReaderUtil.PageMap page : pages) {
             if (!page.completed && !completed_short_name.contains(page.shortName)
                     && !page.shortName.equals("EMPTY")
-                    && !page.shortName.equals("OTHER")){
+                    && !page.shortName.equals("OTHER")) {
                 uncompleted_pages.put(page.shortName, page.fullName);
             }
         }
@@ -844,23 +837,6 @@ public class MainActivity extends AppCompatActivity {
         return uncompleted_pages;
     }
 
-    // 紧急凑的代码，先把数据存成一个txt，等后端写完再读取统一上传
-    private void save_to_txt_jingrixing(List<List<StrokePoint>> strokes_list){
-        Gson gson = new Gson();
-        SimpleDateFormat sdf = new SimpleDateFormat("MMddHHmm");
-        String fileName = sdf.format(new Date()) + ".txt";
-
-        String json_str = gson.toJson(strokes_list);
-
-        saveDataToLocal(json_str, fileName);//本地存储
-        //Log.e("debug", "ok");
-
-        // 清除存储的待上传笔迹、页面存储笔迹以及初始化笔迹
-        StrokeManager.getInstance().clearAll();
-        MyApp.getInstance().setPaperid(null);
-        PointManager.getInstance().clear();
-        dw.initDraw();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -917,45 +893,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //保存
-    public void saveDataToLocal(String json, String fileName) {
-        try {
-            File file = new File(getExternalFilesDir(null), fileName + ".json");
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(json.getBytes());
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //获取
-    public String getDataFromLocal(String fileName) {
-        try {
-            File file = new File(getExternalFilesDir(null), fileName);
-            FileInputStream fis = new FileInputStream(file);
-            byte[] bytes = new byte[(int) file.length()];
-            fis.read(bytes);
-            fis.close();
-            return new String(bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    //删除
-    public boolean deleteLocalFile(String fileName) {
-        try {
-            File file = new File(getExternalFilesDir(null), fileName);
-            return file.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-//    public int fail_num = 0;
-//    public int num_of_files = 0;
 
 
     // 检查上传失败的数据，重新上传
@@ -963,14 +900,14 @@ public class MainActivity extends AppCompatActivity {
         File externalFilesDir = getExternalFilesDir(null);
         File[] files = externalFilesDir.listFiles();
 
-//        num_of_files = 0;
+
         JSONArray jsonArrays = new JSONArray();
         List<String> filenames = new ArrayList<>();
-        for(File file: files){
-            if (file.getName().endsWith(".json")){
+        for (File file : files) {
+            if (file.getName().endsWith(".json")) {
                 String filename = file.getName();
                 filenames.add(filename);
-                String json_str = getDataFromLocal(file.getName());
+                String json_str = getDataFromLocal(file.getName(), MainActivity.this);
                 try {
                     JSONArray json_subject = new JSONArray(json_str);
                     jsonArrays.put(json_subject.get(0));
@@ -988,16 +925,17 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        String url = "http://10.160.8.130:8080/scalesSetRecords/androidUpload";
+                        String url = "https://ibrain.bupt.edu.cn/scaleBackend/scalesSetRecords/androidUpload";
                         OkHttpUtils.getInstance().postAsync(url, jsonArrays.toString(), new OkHttpUtils.Callback() {
                             @Override
                             public void onResponse(Response response) {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (response.code()==200) {
-                                            for(String filename:filenames){
-                                                deleteLocalFile(filename);
+                                        // 后端判定条件，这里认为200即成功
+                                        if (response.code() == 200) {
+                                            for (String filename : filenames) {
+                                                deleteLocalFile(filename, MainActivity.this);
                                             }
                                             Toast.makeText(MainActivity.this, "本地存储笔迹已全部上传成功", Toast.LENGTH_LONG).show();
                                             callback.onUploadComplete();
@@ -1005,7 +943,7 @@ public class MainActivity extends AppCompatActivity {
                                             ReuploadDialogFragment.Refresh();
                                         } else {
                                             Log.e("Response", response.body().toString() + "");
-                                            Toast.makeText(MainActivity.this,   "本地存储数据上传失败!", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(MainActivity.this, "本地存储数据上传失败!", Toast.LENGTH_LONG).show();
                                             callback.onUploadFailed();
                                         }
                                     }
@@ -1017,7 +955,7 @@ public class MainActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(MainActivity.this,   "本地存储数据上传失败!", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(MainActivity.this, "本地存储数据上传失败!", Toast.LENGTH_LONG).show();
                                         callback.onUploadFailed();
                                         Log.e("Response", e.toString() + "");
 
@@ -1035,12 +973,11 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         // 当有存储数据的时候，才可以展示弹窗
-        if (filenames.size()>0){
+        if (filenames.size() > 0) {
             builder.show();
-        }else {
+        } else {
             Toast.makeText(MainActivity.this, "当前没有数据可以上传", Toast.LENGTH_SHORT).show();
         }
-
 
 
     }
@@ -1123,4 +1060,25 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    private void catchGlobalException() {
+        Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> {
+            if (ex instanceof IndexOutOfBoundsException) {
+                // 切回主线程显示一个短提示
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    Toast.makeText(MyApp.getInstance(),
+                                    "检测到蓝牙笔异常，已自动忽略并继续运行",
+                                    Toast.LENGTH_SHORT)
+                            .show();
+                });
+                Log.e("GlobalCatch", "捕获到 IndexOutOfBoundsException，已忽略", ex);
+                // 不再往上抛，App 不会崩溃
+            } else {
+                // 其它异常走系统默认处理流程（可能会退出 App）
+                Thread.getDefaultUncaughtExceptionHandler()
+                        .uncaughtException(thread, ex);
+            }
+        });
+    }
+
 }
