@@ -225,12 +225,16 @@ public class DrawingView extends View implements Serializable {
                     lastPoint = pdata;
 
                     // 设定笔粗细
+//                    float PENWIDTH_MIN = 0.1f;
+//                    float StrokeWidthFactor = 2f;
+//                    float pwidth = 0;
+
                     float PENWIDTH_MIN = 0.1f;
                     float StrokeWidthFactor = 2f;
                     float pwidth = 0;
                     float s_width = PENWIDTH_MIN + StrokeWidthFactor * pdata.getlinewidth() + pwidth;
 
-                    mDrawpaint.setStrokeWidth(s_width);
+                    mDrawpaint.setStrokeWidth(s_width*3);
                     mDrawpaint.setColor(Color.BLACK);
 
                     mCanvas.drawLine(xStart, yStart, xEnd, yEnd, mDrawpaint);
@@ -325,12 +329,15 @@ public class DrawingView extends View implements Serializable {
                 lastPoint = pdata;
 
                 // 设定笔粗细
+//                float PENWIDTH_MIN = 0.1f;
+//                float StrokeWidthFactor = 2f;
+//                float pwidth = 0;
                 float PENWIDTH_MIN = 0.1f;
                 float StrokeWidthFactor = 2f;
                 float pwidth = 0;
                 float s_width = PENWIDTH_MIN + StrokeWidthFactor * pdata.getlinewidth() + pwidth;
 
-                mDrawpaint.setStrokeWidth(s_width * 2);
+                mDrawpaint.setStrokeWidth(s_width * 200);
 
                 // 随机颜色标识提交的笔迹
                 int[] colors = {Color.GRAY, Color.BLUE, Color.MAGENTA, Color.RED, Color.YELLOW, Color.CYAN};

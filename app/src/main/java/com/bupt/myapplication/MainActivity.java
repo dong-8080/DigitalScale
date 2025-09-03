@@ -74,7 +74,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
 
     // import custom drawing view
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity{
     private IntroductionFragment introductionFragment;
     private mmseFragment mmseFragment;
     private String timeStamp;
-    public int cnt=0;
+    public int cnt = 0;
 
     private static String TAG = "MainActivityClass";
 
@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity{
     public static Button undoButton;
 
     public BlueDelegate blueDelegate;
+
     static {
         System.loadLibrary("bbbdraw");
     }
@@ -150,13 +151,13 @@ public class MainActivity extends AppCompatActivity{
         timerFrameLayout.setVisibility(View.GONE);
         recorderFrameLayout = findViewById(R.id.record_fragment);
         recorderFrameLayout.setVisibility(View.GONE);
-        accumulatorFrameLayout=findViewById(R.id.accumulator_fragment);
+        accumulatorFrameLayout = findViewById(R.id.accumulator_fragment);
         accumulatorFrameLayout.setVisibility(View.GONE);
-        contactFragmentLayout=findViewById(R.id.contact_us_fragment);
+        contactFragmentLayout = findViewById(R.id.contact_us_fragment);
         contactFragmentLayout.setVisibility(View.GONE);
-        introductionFragmentLayout=findViewById(R.id.fragment_container2);
+        introductionFragmentLayout = findViewById(R.id.fragment_container2);
         introductionFragmentLayout.setVisibility(View.GONE);
-        mmsepictureFragmentLayout=findViewById(R.id.mmse_picture_fragment);
+        mmsepictureFragmentLayout = findViewById(R.id.mmse_picture_fragment);
         mmsepictureFragmentLayout.setVisibility(View.GONE);
 
         contactUsContainer = findViewById(R.id.fragment_container);
@@ -165,25 +166,22 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 Log.d("jahsgjads", "ok");
-                try{
+                try {
                     contactFragmentLayout.setVisibility(View.GONE);
                     destroyFragment(contactFragment);
-                }
-                catch (Exception e){
+                } catch (Exception e) {
 
                 }
-                try{
+                try {
                     introductionFragmentLayout.setVisibility(View.GONE);
                     destroyFragment(introductionFragment);
-                }
-                catch (Exception e){
+                } catch (Exception e) {
 
                 }
-                try{
+                try {
                     mmsepictureFragmentLayout.setVisibility(View.GONE);
                     destroyFragment(mmseFragment);
-                }
-                catch (Exception e){
+                } catch (Exception e) {
 
                 }
             }
@@ -283,7 +281,7 @@ public class MainActivity extends AppCompatActivity{
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        navigationView =findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         toolbox();
 
         // Set up the navigation view listener
@@ -293,70 +291,63 @@ public class MainActivity extends AppCompatActivity{
 
             if (id == R.id.instruction) {
                 introductionFragmentLayout.setVisibility(View.VISIBLE);
-                introductionFragment=new IntroductionFragment();
+                introductionFragment = new IntroductionFragment();
                 replaceFragment3(introductionFragment);
-            }
-            else if(id==R.id.to_be_upload){
-                uploadDialogFragment =new ReuploadDialogFragment();
+            } else if (id == R.id.to_be_upload) {
+                uploadDialogFragment = new ReuploadDialogFragment();
                 uploadDialogFragment.show(getSupportFragmentManager(), "dialog");
-            }
-            else if(id==R.id.history){
+            } else if (id == R.id.history) {
                 Toast.makeText(this, "功能暂未实现", Toast.LENGTH_SHORT).show();
-            }
-            else if(id==R.id.bluetooth_connect){
+            } else if (id == R.id.bluetooth_connect) {
                 dialogFragment.show(getSupportFragmentManager(), "dialog");
-            }
-            else if(id==R.id.toolbox){
+            } else if (id == R.id.toolbox) {
                 toolbox();
                 return true;
-            }
-            else if(id==R.id.contact_us){
+            } else if (id == R.id.contact_us) {
                 contactFragmentLayout.setVisibility(View.VISIBLE);
-                contactFragment=new ContactFragment();
+                contactFragment = new ContactFragment();
                 replaceFragment2(contactFragment);
-            }
-            else if(id == R.id.timer){
+            } else if (id == R.id.timer) {
                 timerFrameLayout.setVisibility(View.VISIBLE);
                 MyTimer myTimer = new MyTimer();
                 myTimer.setiFragmentCallBack(new IFragmentCallBack() {
                     @Override
                     public void send2main(String msg) {
-                        if(msg.equals("close")){
+                        if (msg.equals("close")) {
                             destroyFragment(myTimer);
                             timerFrameLayout.setVisibility(View.GONE);
                         }
                     }
+
                     @Override
                     public String getFromMain(String msg) {
                         return null;
                     }
                 });
                 replaceFragment(myTimer);
-            }
-            else if(id==R.id.accumulator){
+            } else if (id == R.id.accumulator) {
                 accumulatorFrameLayout.setVisibility(View.VISIBLE);
-                MyAccumulator myAccumulator=new MyAccumulator();
+                MyAccumulator myAccumulator = new MyAccumulator();
                 myAccumulator.setiFragmentCallBack(new IFragmentCallBack() {
                     @Override
                     public void send2main(String msg) {
-                        if(msg.equals("close")){
+                        if (msg.equals("close")) {
                             destroyFragment(myAccumulator);
                             accumulatorFrameLayout.setVisibility(View.GONE);
                         }
                     }
+
                     @Override
                     public String getFromMain(String msg) {
                         return null;
                     }
                 });
                 replaceFragment4(myAccumulator);
-            }
-            else if(id==R.id.picture){
+            } else if (id == R.id.picture) {
                 mmsepictureFragmentLayout.setVisibility(View.VISIBLE);
-                mmseFragment=new mmseFragment();
+                mmseFragment = new mmseFragment();
                 replaceFragment5(mmseFragment);
-            }
-            else if(id == R.id.record){
+            } else if (id == R.id.record) {
                 recorderFrameLayout.setVisibility(View.VISIBLE);
                 Recorder recorder = new Recorder();
                 recorder.setiFragmentCallBack(new IFragmentCallBack() {
@@ -385,28 +376,27 @@ public class MainActivity extends AppCompatActivity{
         init();
     }
 
-    public void closeFragment(View view){
-        FragmentManager fragmentManager=getSupportFragmentManager();
-        Fragment fragment=fragmentManager.findFragmentById(R.id.fragment_container);
-        if(fragment!=null){
+    public void closeFragment(View view) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        if (fragment != null) {
             fragmentManager.beginTransaction().remove(fragment).commit();
         }
     }
 
 
     private void toolbox() {
-        Menu menu =navigationView.getMenu();
-        MenuItem subMenu1=menu.findItem(R.id.timer);
-        MenuItem subMenu2=menu.findItem(R.id.record);
-        MenuItem subMenu3=menu.findItem(R.id.accumulator);
-        MenuItem subMenu4=menu.findItem(R.id.picture);
-        if(subMenu1.isVisible()){
+        Menu menu = navigationView.getMenu();
+        MenuItem subMenu1 = menu.findItem(R.id.timer);
+        MenuItem subMenu2 = menu.findItem(R.id.record);
+        MenuItem subMenu3 = menu.findItem(R.id.accumulator);
+        MenuItem subMenu4 = menu.findItem(R.id.picture);
+        if (subMenu1.isVisible()) {
             subMenu1.setVisible(false);
             subMenu2.setVisible(false);
             subMenu3.setVisible(false);
             subMenu4.setVisible(false);
-        }
-        else{
+        } else {
             subMenu1.setVisible(true);
             subMenu2.setVisible(true);
             subMenu3.setVisible(true);
@@ -448,7 +438,7 @@ public class MainActivity extends AppCompatActivity{
                 onOptionsItemSelected(menu.findItem(R.id.undoButton));
             }
         });
-        Log.d("menu", "undomenuitem+ "+undoMenuItem);
+        Log.d("menu", "undomenuitem+ " + undoMenuItem);
         Log.d("undobutton", "undoButton: " + undoButton);
         return true;
     }
@@ -458,7 +448,6 @@ public class MainActivity extends AppCompatActivity{
         MyDialogFragment dialogFragment = new MyDialogFragment();
         dialogFragment.show(getSupportFragmentManager(), "dialog");
     }
-
 
 
     Handler stopScanHandler = new Handler();
@@ -489,6 +478,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     public static final int REQUEST_BLUETOOTH_PERMISSION = 310;
+
     private void checkBluetoothPermission() {
         // 检查蓝牙权限是否已授予
         // 写满权限
@@ -550,13 +540,13 @@ public class MainActivity extends AppCompatActivity{
             // TODO： fix 处理点击事件
 //            showUploadConfirmationDialog();
             // 数据上传操作
-            String message="个人信息未填写完整，请检查个人信息后再次上传";
+            String message = "个人信息未填写完整，请检查个人信息后再次上传";
             List<List<StrokePoint>> strokes_list = StrokeManager.getInstance().getALL();//获取所有笔迹数据
             //上传前确认每一页做答情况
-            boolean[] IsWrite=StrokeManager.getStrokePages(strokes_list);
+            boolean[] IsWrite = StrokeManager.getStrokePages(strokes_list);
             if (!IsWrite[6]) {
                 // 弹出提示对话框
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.CustomAlertDialogBackground);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.CustomAlertDialogBackground);
                 builder.setTitle("上传提示");
                 //ScrollView scrollView = new ScrollView(MainActivity.this);
                 //scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -572,44 +562,44 @@ public class MainActivity extends AppCompatActivity{
                 return false;
             }
             boolean unfinished = false;
-            for(int i=3;i<31;i++){
+            for (int i = 3; i < 31; i++) {
                 if (!IsWrite[i]) {
-                    unfinished=true;
+                    unfinished = true;
                     break;
                 }
             }
-            message="";
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.CustomAlertDialogBackground);
+            message = "";
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.CustomAlertDialogBackground);
             // 如果存在未填写页码
             if (unfinished) {
                 builder.setTitle("以下问卷未作答，是否继续上传？");
                 // 构建提示信息
-                if(!IsWrite[8]||!IsWrite[9])message+="神经精神科问卷(NPI)\n";
-                if(!IsWrite[10])message+="老年人生活能力(ADL)\n";
-                if(!IsWrite[11]||!IsWrite[12])message+="临床痴呆指标(CDR)\n";
-                if(!IsWrite[13])message+="痴呆病感缺失问卷—知情者版(AQD)\n";
-                if(!IsWrite[14]||!IsWrite[15])message+="简易智力状态检测表(MMSE)\n";
-                if(!IsWrite[16])message+="数字广度测验(DST)\n";
-                if(!IsWrite[17])message+="听觉词语学习测验(AVLT,N1-N3)\n";
-                if(!IsWrite[18])message+="听觉词语学习测验(AVLT,N4)\n";
-                if(!IsWrite[19])message+="听觉词语学习测验(AVLT,N5)\n";
-                if(!IsWrite[20]||!IsWrite[21])message+="连线测验(TMT) Trails1\n";
-                if(!IsWrite[22]||!IsWrite[23])message+="连线测验(TMT) Trails2\n";
-                if(!IsWrite[24])message+="Hachinski缺血指数量表(HIS)\n";
-                if(!IsWrite[28])message+="老年抑郁量表(GDS简化版)\n";
-                if(!IsWrite[29]||!IsWrite[30])message+="匹兹堡睡眠质量指数(PSQI)\n";
-                if(!IsWrite[31])message+="主观认知下降(SCD-9)自测问卷\n";
-                if(!IsWrite[25]||!IsWrite[27]||!IsWrite[32])message+="复杂图形测验(CFT)\n";
-                if(!IsWrite[33])message+="痴呆病感缺失问卷—被试版(AQD)\n";
-                if(!IsWrite[34]||!IsWrite[35]||!IsWrite[36])message+="蒙特利尔认知评估(MOCA)\n";
-                if(!IsWrite[37])message+="画钟测验(CDT)\n";
-                if(!IsWrite[38])message+="词语流畅度测验(VFT)-A\n";
-                if(!IsWrite[39])message+="词语流畅度测验(VFT)-B\n";
-                if(!IsWrite[40])message+="词语流畅度测验(VFT)-C\n";
-            }
-            else{
+                if (!IsWrite[8] || !IsWrite[9]) message += "神经精神科问卷(NPI)\n";
+                if (!IsWrite[10]) message += "老年人生活能力(ADL)\n";
+                if (!IsWrite[11] || !IsWrite[12]) message += "临床痴呆指标(CDR)\n";
+                if (!IsWrite[13]) message += "痴呆病感缺失问卷—知情者版(AQD)\n";
+                if (!IsWrite[14] || !IsWrite[15]) message += "简易智力状态检测表(MMSE)\n";
+                if (!IsWrite[16]) message += "数字广度测验(DST)\n";
+                if (!IsWrite[17]) message += "听觉词语学习测验(AVLT,N1-N3)\n";
+                if (!IsWrite[18]) message += "听觉词语学习测验(AVLT,N4)\n";
+                if (!IsWrite[19]) message += "听觉词语学习测验(AVLT,N5)\n";
+                if (!IsWrite[20] || !IsWrite[21]) message += "连线测验(TMT) Trails1\n";
+                if (!IsWrite[22] || !IsWrite[23]) message += "连线测验(TMT) Trails2\n";
+                if (!IsWrite[24]) message += "Hachinski缺血指数量表(HIS)\n";
+                if (!IsWrite[28]) message += "老年抑郁量表(GDS简化版)\n";
+                if (!IsWrite[29] || !IsWrite[30]) message += "匹兹堡睡眠质量指数(PSQI)\n";
+                if (!IsWrite[31]) message += "主观认知下降(SCD-9)自测问卷\n";
+                if (!IsWrite[25] || !IsWrite[27] || !IsWrite[32]) message += "复杂图形测验(CFT)\n";
+                if (!IsWrite[33]) message += "痴呆病感缺失问卷—被试版(AQD)\n";
+                if (!IsWrite[34] || !IsWrite[35] || !IsWrite[36])
+                    message += "蒙特利尔认知评估(MOCA)\n";
+                if (!IsWrite[37]) message += "画钟测验(CDT)\n";
+                if (!IsWrite[38]) message += "词语流畅度测验(VFT)-A\n";
+                if (!IsWrite[39]) message += "词语流畅度测验(VFT)-B\n";
+                if (!IsWrite[40]) message += "词语流畅度测验(VFT)-C\n";
+            } else {
                 builder.setTitle("上传提示");
-                message+="您已完成全部作答，是否继续上传";
+                message += "您已完成全部作答，是否继续上传";
             }
             // 弹出确认对话框
             builder.setMessage(message)
@@ -637,7 +627,7 @@ public class MainActivity extends AppCompatActivity{
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            if (response.contains("200")){
+                                            if (response.contains("200")) {
                                                 // 提交成功重新开始
                                                 // 清除存储的待上传笔迹、页面存储笔迹以及初始化笔迹
                                                 StrokeManager.getInstance().clearAll();
@@ -654,8 +644,8 @@ public class MainActivity extends AppCompatActivity{
                                                 //builder.setIcon(R.drawable.success_icon);
                                                 Log.e("Response", response);
 
-                                            }else {
-                                                Log.e("HTTP", response+"");
+                                            } else {
+                                                Log.e("HTTP", response + "");
                                                 //System.out.println(getDataFromLocal(String.valueOf(cnt)));
                                                 //Toast.makeText(MainActivity.this, "数据上传失败", Toast.LENGTH_SHORT).show();
                                             }
@@ -688,10 +678,9 @@ public class MainActivity extends AppCompatActivity{
                                     });
                                 }
                             });
-                            try{
+                            try {
                                 upLoadSoundFile();
-                            }
-                            catch(Exception e){
+                            } catch (Exception e) {
                                 Log.e("sound_error", String.valueOf(e));
                             }
                         }
@@ -700,9 +689,9 @@ public class MainActivity extends AppCompatActivity{
             // 设置对话框的最大高度
             AlertDialog dialog = builder.create();
             dialog.show();
-            dialog.getWindow().setLayout(1320,600);
-        } else if (id==R.id.clear) {//清空按钮点击事件处理
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.CustomAlertDialogBackground);
+            dialog.getWindow().setLayout(1320, 600);
+        } else if (id == R.id.clear) {//清空按钮点击事件处理
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.CustomAlertDialogBackground);
             builder.setTitle("笔迹清除")
                     .setMessage("确定要删除所有笔迹吗？该操作不可撤回")
                     .setPositiveButton("确认", new DialogInterface.OnClickListener() {
@@ -725,7 +714,7 @@ public class MainActivity extends AppCompatActivity{
                     })
                     .setNegativeButton("取消", /* 监听器 */ null)
                     .show();
-        }else if(id== R.id.undoButton) {
+        } else if (id == R.id.undoButton) {
             //撤销按钮点击事件处理
             StrokeManager.getInstance().withdraw();
             PointManager.getInstance().withdraw();
@@ -768,6 +757,7 @@ public class MainActivity extends AppCompatActivity{
             e.printStackTrace();
         }
     }
+
     //获取
     public String getDataFromLocal(String fileName) {
         try {
@@ -782,6 +772,7 @@ public class MainActivity extends AppCompatActivity{
             return "";
         }
     }
+
     //删除
     public boolean deleteLocalFile(String fileName) {
         try {
@@ -792,11 +783,12 @@ public class MainActivity extends AppCompatActivity{
             return false;
         }
     }
+
     public void Reupload() {
         File externalFilesDir = getExternalFilesDir(null);
         File[] files = externalFilesDir.listFiles();
         List<String> jsonFiles = new ArrayList<>();
-        int num_of_files=0;
+        int num_of_files = 0;
         for (File file : files) {
             if (file.getName().endsWith(".json")) {
                 jsonFiles.add(file.getName());
@@ -804,100 +796,104 @@ public class MainActivity extends AppCompatActivity{
             }
         }
         final int[] fail_num = {0};
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.CustomAlertDialogBackground);
-        String message="发现"+num_of_files+"份未上传记录，是否重新上传";
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.CustomAlertDialogBackground);
+        String message = "发现" + num_of_files + "份未上传记录，是否重新上传";
         builder.setTitle("重新上传提示")
                 .setMessage(message)
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String url = "http://10.21.201.179:8082/scale/insertscale";
-                        for(String filename:jsonFiles){
+                        for (String filename : jsonFiles) {
                             OkHttpUtils.getInstance().postAsync(url, getDataFromLocal(filename), new OkHttpUtils.Callback() {
                                 @Override
                                 public void onResponse(String response) {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            if (response.contains("200")){
+                                            if (response.contains("200")) {
                                                 deleteLocalFile(filename);
                                                 Log.e("Response", response);
                                                 ReuploadDialogFragment.Refresh();
-                                                }else {
-                                                    Log.e("HTTP", response+"");
-                                                }
+                                            } else {
+                                                Log.e("HTTP", response + "");
                                             }
-                                        });
-                                    }
+                                        }
+                                    });
+                                }
 
-                                    @Override
-                                    public void onFailure(IOException e) {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                fail_num[0]++;
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                            if(fail_num[0] !=0){
-                                Toast.makeText(MainActivity.this, fail_num[0]+"条信息上传失败!", Toast.LENGTH_LONG).show();
-                            }
-                            else{
-                                Toast.makeText(MainActivity.this, "本地存储笔迹已全部上传成功", Toast.LENGTH_LONG).show();
-                            }
+                                @Override
+                                public void onFailure(IOException e) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            fail_num[0]++;
+                                        }
+                                    });
+                                }
+                            });
                         }
-                    })
-                    .setNegativeButton("取消", /* 监听器 */ null)
-                    .show();
+                        if (fail_num[0] != 0) {
+                            Toast.makeText(MainActivity.this, fail_num[0] + "条信息上传失败!", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "本地存储笔迹已全部上传成功", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                })
+                .setNegativeButton("取消", /* 监听器 */ null)
+                .show();
     }
 
-    private void replaceFragment(Fragment fragment){
+    private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.timer_fragment, fragment);
         transaction.commit();
     }
 
-    private void replaceFragment1(Fragment fragment){
+    private void replaceFragment1(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.record_fragment, fragment);
         transaction.commit();
     }
-    private void replaceFragment2(Fragment fragment){
+
+    private void replaceFragment2(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.contact_us_fragment, fragment);
         transaction.commit();
     }
-    private void replaceFragment3(Fragment fragment){
+
+    private void replaceFragment3(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container2, fragment);
         transaction.commit();
     }
-    private void replaceFragment4(Fragment fragment){
+
+    private void replaceFragment4(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.accumulator_fragment, fragment);
         transaction.commit();
     }
-    private void replaceFragment5(Fragment fragment){
+
+    private void replaceFragment5(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.mmse_picture_fragment, fragment);
         transaction.commit();
     }
-    private void destroyFragment(Fragment fragment){
+
+    private void destroyFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.remove(fragment);
         transaction.commit();
     }
 
-    private void upLoadFile(File file, String name){
+    private void upLoadFile(File file, String name) {
         // 创建OkHttpClient实例
         OkHttpClient client = new OkHttpClient();
 
@@ -939,7 +935,8 @@ public class MainActivity extends AppCompatActivity{
             }
         });
     }
-    private void upLoadSoundFile(){
+
+    private void upLoadSoundFile() {
         // 创建OkHttpClient实例
         OkHttpClient client = new OkHttpClient();
 
