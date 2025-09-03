@@ -20,6 +20,7 @@ import com.bupt.myapplication.MainActivity;
 import com.bupt.myapplication.R;
 import com.bupt.myapplication.recyclerList.BLEScanAdapter;
 import com.bupt.myapplication.recyclerList.ReuploadAdapter;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -65,7 +66,12 @@ public class ReuploadDialogFragment extends DialogFragment {
     }
 
     private void submit() {
-        activity.Reupload();
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("上传确认")
+                .setMessage("将立即尝试补传所有未上传的记录，确认继续吗？")
+                .setPositiveButton("确认", (d, i) -> activity.Reupload())
+                .setNegativeButton("取消", null)
+                .show();
     }
 
     public static void Refresh() {

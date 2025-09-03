@@ -183,33 +183,27 @@ public class MyDialogFragment extends DialogFragment implements BLEScanObserver{
         // 提示蓝牙笔有无连接
 
         if (!isConnected) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.CustomAlertDialogBackground);
-                    builder.setTitle("蓝牙笔连接提示")
-                    .setMessage("当前没有连接蓝牙笔，确认进行下一步吗?")
-                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            // 用户点击确认按钮的操作
-                            dismiss();
-                            GlobalVars.getInstance().setOpened(true);
-                        }
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("蓝牙笔连接提示")
+                    .setMessage("当前没有连接蓝牙笔，确认进行下一步吗？")
+                    .setPositiveButton("确认", (dialogInterface, i) -> {
+                        dismiss();
+                        GlobalVars.getInstance().setOpened(true);
                     })
                     .setNegativeButton("取消", null)
+                    .setCancelable(true)
                     .show();
             //Toast.makeText(requireContext(), "蓝牙未连接，不能进行下一步", Toast.LENGTH_SHORT).show();
         } else if (!isNetworkConnected(getContext())) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.CustomAlertDialogBackground);
-             builder.setTitle("提示")
-                    .setMessage("当前没有连接网络，确认进行下一步吗?")
-                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            // 用户点击确认按钮的操作
-                            dismiss();
-                            GlobalVars.getInstance().setOpened(true);
-                        }
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("网络连接提示")
+                    .setMessage("当前没有连接网络，确认进行下一步吗？")
+                    .setPositiveButton("确认", (dialogInterface, i) -> {
+                        dismiss();
+                        GlobalVars.getInstance().setOpened(true);
                     })
                     .setNegativeButton("取消", null)
+                    .setCancelable(true)
                     .show();
         } else {
             dismiss();

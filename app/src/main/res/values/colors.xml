@@ -18,5 +18,24 @@
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
-    //TODO:add colors
+    
+    <!-- Material 语义化颜色（新增，不影响旧引用） -->
+    <color name="md_primary">#FF016934</color>
+    <color name="md_on_primary">#FFFFFFFF</color>
+    <color name="md_primary_variant">#FF2B5B45</color>
+
+    <color name="md_secondary">#FF03DAC5</color>
+    <color name="md_on_secondary">#FF000000</color>
+
+    <color name="md_background">#FFF7F8F9</color>
+    <color name="md_on_background">#FF1B1B1F</color>
+
+    <color name="md_surface">#FFFFFFFF</color>
+    <color name="md_on_surface">#FF1B1B1F</color>
+
+    <color name="md_error">#FFB3261E</color>
+    <color name="md_on_error">#FFFFFFFF</color>
+    
+    <!-- 分割线/边框弱化色 -->
+    <color name="md_outline">#FF79747E</color>
 </resources>
