@@ -2,8 +2,6 @@ package com.bupt.myapplication.recyclerList;
 
 import android.util.Log;
 
-import com.bupt.myapplication.data.PagePointManager;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -47,8 +45,8 @@ public class BLEScanManager {
     }
 
     private void notifyObservers(){
-        Log.e("adddata", "notify changed1  "+dataList.size());
-        Log.e("adddata", "observer size "+observers.size());
+        Log.d("BLEScan", "notify changed size="+dataList.size());
+        Log.d("BLEScan", "observer size="+observers.size());
         for (BLEScanObserver observer:observers){
             observer.onBLEScanChanged();
         }
