@@ -21,18 +21,13 @@ import com.bupt.myapplication.R;
 import com.bupt.myapplication.data.PointManager;
 
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.Random;
 
 // 自定义画图控件
 // 映射出所有的笔迹，无需改动
-public class DrawingView extends View implements Serializable {
+public class DrawingView extends View {
 
     Paint mDrawpaint;
-
-    // 测试后删除
-    Paint mTextpaint;
 
     PointData lastPoint;
     Canvas mCanvas;
@@ -45,8 +40,6 @@ public class DrawingView extends View implements Serializable {
 
     public float page_width_forscreen;
     public float page_height_forscreen;
-
-    private String text = "";
 
     public DrawingView(Context context) {
         super(context);
@@ -103,17 +96,7 @@ public class DrawingView extends View implements Serializable {
         mDrawpaint.setStrokeJoin(Paint.Join.ROUND);
         mDrawpaint.setStrokeCap(Paint.Cap.ROUND);
 
-        // 测试后删除
-        mTextpaint = new Paint(Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG);
-        mTextpaint.setStrokeWidth(5);
-        mTextpaint.setTextSize(30);
-
         mCanvas = new Canvas();
-
-        // 获取纸类型 测试样例为正度16K
-//        Paper paper = new Paper(16);
-//        page_width = paper.getWidth();
-//        page_height = paper.getHeight();
 
         String pageID = MyApp.getInstance().getPaperid();
         Log.e("pageid", "pageid:"+pageID);
@@ -122,27 +105,8 @@ public class DrawingView extends View implements Serializable {
         page_width = 185.f - 6;
         page_height = 260.f - 6;
 
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//        options.inScaled = false;
-//        options.inDensity = DisplayMetrics.DENSITY_DEFAULT;
-//        options.inTargetDensity = DisplayMetrics.DENSITY_DEFAULT;
-
         background = get_drawing_background(pageID);
 
-//        // 此处screenWidth=1200
-//        int screenWidth = getResources().getDisplayMetrics().widthPixels;
-//        Log.e("TAG", "screenWidth:"+screenWidth);
-//
-//        // background width and height
-//        int newWidth = screenWidth;
-//        int newHeight = (int) (background.getHeight() * ((float) newWidth / background.getWidth()));
-//
-//        bitmap = Bitmap.createScaledBitmap(background, newWidth, newHeight, false);
-//
-//        mCanvas = new Canvas(bitmap);
-//
-//        page_width_forscreen = newWidth;
-//        page_height_forscreen = newHeight;
         // 获取屏幕宽高
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
         int screenHeight = getResources().getDisplayMetrics().heightPixels;
@@ -317,54 +281,6 @@ public class DrawingView extends View implements Serializable {
         PointManager.getInstance().EraseListClear();
     }
 
-    // TODO: 演示使用模拟提交，使得字迹变化, 测试方法
-    public void notifyReDraw(List<PointData> pointList) {
-
-        while (pointList.size() > 0) {
-            PointData pdata = pointList.get(0);
-            if (pdata != null) {
-            }
-
-            if (pdata == null || pdata.isStroke_end()) {
-                Log.d("onDraw ", "drawData 笔画结束 ");
-                pointList.remove(0);
-            } else {
-                // 正常绘制，这里应该判断下纸是是否匹配的
-                // Demo中只需要在正16K纸上进行测试即可
-                pointList.remove(0);
-
-                if (lastPoint == null || pdata.isStroke_start() == true) {
-                    lastPoint = pdata;
-                }
-
-                float xStart = page_width_forscreen * (pdata.get_x()) / page_width;
-                float yStart = page_height_forscreen * (pdata.get_y()) / page_height;
-                float xEnd = page_width_forscreen * (lastPoint.get_x()) / page_width;
-                float yEnd = page_height_forscreen * (lastPoint.get_y()) / page_height;
-
-                lastPoint = pdata;
-
-                // 设定笔粗细
-                float PENWIDTH_MIN = 0.1f;
-                float StrokeWidthFactor = 2f;
-                float pwidth = 0;
-                float s_width = PENWIDTH_MIN + StrokeWidthFactor * pdata.getlinewidth() + pwidth;
-
-                mDrawpaint.setStrokeWidth(s_width * 2);
-
-                // 随机颜色标识提交的笔迹
-                int[] colors = {Color.GRAY, Color.BLUE, Color.MAGENTA, Color.RED, Color.YELLOW, Color.CYAN};
-                Random random = new Random();
-                int randomIndex = random.nextInt(colors.length);
-                int randomColor = colors[randomIndex];
-                mDrawpaint.setColor(randomColor);
-
-                mCanvas.drawLine(xStart, yStart, xEnd, yEnd, mDrawpaint);
-
-            }
-        }
-    }
-
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -372,18 +288,9 @@ public class DrawingView extends View implements Serializable {
         initDraw();
     }
 
-    public void notifyTextChanged(String text) {
-        this.text = text;
-        invalidate();
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-//        canvas.drawBitmap(bitmap, 0, 0, null);
-//        // 测试后删除
-//        canvas.drawText(text, 80, 80, mTextpaint);
-//        invalidate();
 
         if (bitmap != null) {
             int canvasWidth = canvas.getWidth();

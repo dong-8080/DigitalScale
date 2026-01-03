@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -17,93 +18,110 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            android:elevation="4dp"
+            android:elevation="@dimen/md_elevation_button"
             app:title="   "
-            app:titleTextColor="@color/white"
-            app:titleCentered="true"
-            android:paddingStart="10dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+            app:titleTextColor="?attr/colorOnPrimary"
+            app:navigationIconTint="?attr/colorOnPrimary"
+            android:paddingStart="@dimen/md_space_16"
+            android:paddingEnd="@dimen/md_space_8" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurface">
 
             <FrameLayout
                 android:id="@+id/contact_us_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:translationZ="10dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/md_space_16"
+                android:background="@drawable/bg_md3_surface_card"
+                android:clipToOutline="true"
+                android:outlineProvider="background"
+                android:elevation="@dimen/md_elevation_card"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="640dp"
+                app:layout_constraintHeight_max="640dp"
                 android:clickable="true"
                 android:onClick="closeFragment"
-                android:background="@color/white" />
+                android:foreground="?attr/selectableItemBackground"
+                android:focusable="true" />
 
             <FrameLayout
                 android:id="@+id/mmse_picture_fragment"
-                android:layout_width="550dp"
-                android:layout_height="280dp"
-                android:translationZ="5dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/md_space_16"
+                android:background="@drawable/bg_md3_surface_card"
+                android:clipToOutline="true"
+                android:outlineProvider="background"
+                android:elevation="@dimen/md_elevation_card"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="550dp"
+                app:layout_constraintHeight_max="280dp"
                 android:clickable="true"
                 android:onClick="closeFragment"
-                android:background="@android:color/transparent"/>
+                android:foreground="?attr/selectableItemBackground"
+                android:focusable="true" />
 
             <FrameLayout
                 android:id="@+id/fragment_container2"
-                android:layout_width="520dp"
-                android:layout_height="600dp"
-                android:translationZ="10dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/md_space_16"
+                android:background="@drawable/bg_md3_surface_card"
+                android:clipToOutline="true"
+                android:outlineProvider="background"
+                android:elevation="@dimen/md_elevation_card"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:background="@color/white" />
+                app:layout_constraintWidth_max="520dp"
+                app:layout_constraintHeight_max="600dp" />
 
             <FrameLayout
                 android:id="@+id/timer_fragment"
-                android:layout_width="280dp"
-                android:layout_height="140dp"
-                android:translationZ="10dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/md_space_16"
+                android:background="@drawable/bg_md3_surface_card"
+                android:clipToOutline="true"
+                android:outlineProvider="background"
+                android:elevation="@dimen/md_elevation_card"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0"
                 app:layout_constraintHorizontal_bias="0"
-                android:background="@color/white" />
-
-            <FrameLayout
-                android:id="@+id/record_fragment"
-                android:layout_width="280dp"
-                android:layout_height="140dp"
-                android:translationZ="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0"
-                app:layout_constraintHorizontal_bias="0"
-                android:background="@color/white" />
+                app:layout_constraintWidth_max="280dp"
+                app:layout_constraintHeight_max="140dp" />
 
             <FrameLayout
                 android:id="@+id/accumulator_fragment"
-                android:layout_width="280dp"
-                android:layout_height="160dp"
-                android:translationZ="10dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/md_space_16"
+                android:background="@drawable/bg_md3_surface_card"
+                android:clipToOutline="true"
+                android:outlineProvider="background"
+                android:elevation="@dimen/md_elevation_card"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0"
                 app:layout_constraintHorizontal_bias="1"
-                android:background="@color/white" />
+                app:layout_constraintWidth_max="280dp"
+                app:layout_constraintHeight_max="160dp" />
 
 
             <com.bupt.myapplication.view.DrawingView
@@ -124,39 +142,59 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:paddingLeft="20dp"
+                android:paddingStart="@dimen/md_space_16"
                 android:text="Pen ID:"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-            <EditText
-                android:paddingLeft="20dp"
-                android:id="@+id/edit_text"
-                android:text="CFAF08A26A04"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"/>
+            <!-- MD3 输入框：悬浮标签 + 可配置错误提示样式 -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pen_id_input_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/md_space_16"
+                android:layout_marginEnd="@dimen/md_space_16"
+                android:layout_weight="1"
+                android:hint="Pen ID"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusTopStart="@dimen/md_corner_8"
+                app:boxCornerRadiusTopEnd="@dimen/md_corner_8"
+                app:boxCornerRadiusBottomStart="@dimen/md_corner_8"
+                app:boxCornerRadiusBottomEnd="@dimen/md_corner_8"
+                app:errorEnabled="true">
 
-            <Button
-                android:layout_marginLeft="20dp"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:text="CFAF08A26A04" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- MD3 按钮：主/次/文本区分 -->
+            <com.google.android.material.button.MaterialButton
+                android:layout_marginStart="@dimen/md_space_16"
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="连接蓝牙笔"
-                />
+                style="@style/Widget.Material3.Button" />
 
-            <Button
-                android:layout_marginLeft="20dp"
+            <com.google.android.material.button.MaterialButton
+                android:layout_marginStart="@dimen/md_space_8"
                 android:id="@+id/button2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="重置"/>
+                android:text="重置"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
 
-            <Button
-                android:layout_marginLeft="20dp"
+            <com.google.android.material.button.MaterialButton
+                android:layout_marginStart="@dimen/md_space_8"
                 android:id="@+id/button3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="测试按钮"/>
+                android:text="测试按钮"
+                style="@style/Widget.Material3.Button.TextButton" />
 
         </LinearLayout>
 
@@ -165,10 +203,20 @@
     <!-- The navigation drawer -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="420dp"
+        android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@drawable/side_nav_bar"
-        app:menu="@menu/drawer_view" /> <!-- Reference to menu items for the drawer -->
+        android:background="?attr/colorSurface"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/drawer_view"
+        app:itemIconTint="?attr/colorOnSurfaceVariant"
+        app:itemTextColor="?attr/colorOnSurface"
+        app:itemIconPadding="16dp"
+        app:itemRippleColor="?attr/colorPrimary"
+        app:itemShapeFillColor="@android:color/transparent"
+        app:itemShapeInsetStart="16dp"
+        app:itemShapeInsetEnd="16dp"
+        app:itemShapeInsetTop="4dp"
+        app:itemShapeInsetBottom="4dp" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

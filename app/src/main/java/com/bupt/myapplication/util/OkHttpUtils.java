@@ -45,11 +45,6 @@ public class OkHttpUtils {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-//                if (!response.isSuccessful()) {
-//                    callback.onFailure(new IOException("Unexpected code " + response));
-//                    return;
-//                }
-
                 callback.onResponse(response);
             }
         });
@@ -74,11 +69,6 @@ public class OkHttpUtils {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-//                if (!response.isSuccessful()) {
-//                    callback.onFailure(new IOException("Unexpected code " + response));
-//                    return;
-//                }
-
                 callback.onResponse(response);
             }
         });

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 弹窗底色：白/灰的 surface，避免主色（绿）渗透 -->
+    <solid android:color="?attr/colorSurface" />
+    <stroke
+        android:width="1dp"
+        android:color="?attr/colorOutline" />
+    <corners android:radius="@dimen/md_corner_8" />
+</shape>
+
+

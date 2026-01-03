@@ -8,15 +8,36 @@
     <color name="black">#FF000000</color>
     <color name="red">#FFFF0000</color>
     <color name='pink'>#FFDEA8A5</color>
-    <color name='darkgreen'>#FF2B5B45</color>
     <color name="maingreen">#FF016934</color>
-    <color name='creamgreen'>#FF8DC097</color>
-    <color name="lightgreen">#FFA5DEAB</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="light_blue_900">#FF01579B</color>
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
-    //TODO:add colors
+
+    <!-- ===================== -->
+    <!-- Material Design 3 配色（浅色） -->
+    <!-- 主色 / 强调色（可在此替换为你的品牌色） -->
+    <color name="brand_primary">#016934</color>
+    <color name="brand_on_primary">#FFFFFF</color>
+    <!-- 主色容器：改为中性色，避免被用作背景 -->
+    <color name="brand_primary_container">#F5F5F5</color>
+    <color name="brand_on_primary_container">#1B1B1B</color>
+
+    <color name="brand_secondary">#FFFFFF</color>
+    <color name="brand_on_secondary">#000000</color>
+    <!-- 次要色容器：改为中性色，避免被用作背景 -->
+    <color name="brand_secondary_container">#F5F5F5</color>
+    <color name="brand_on_secondary_container">#1B1B1B</color>
+
+    <!-- 表面/背景/描边：保证文本对比度 -->
+    <color name="md3_background">#FFFFFF</color>
+    <color name="md3_on_background">#1B1B1B</color>
+    <color name="md3_surface">#FFFFFF</color>
+    <color name="md3_on_surface">#1B1B1B</color>
+    <!-- 中性表面色：避免“整页泛绿” -->
+    <color name="md3_surface_variant">#F5F5F5</color>
+    <color name="md3_on_surface_variant">#4B4B4B</color>
+    <color name="md3_outline">#D0D5DD</color>
 </resources>

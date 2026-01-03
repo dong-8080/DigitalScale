@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -13,14 +14,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,7 +45,6 @@ import com.bupt.myapplication.recyclerList.BLEScanAdapter;
 import com.bupt.myapplication.recyclerList.BLEScanManager;
 import com.bupt.myapplication.recyclerList.BLEScanObserver;
 import com.bupt.myapplication.view.EditableSequenceView;
-import com.bupt.myapplication.view.EditableSequenceViewXW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +54,8 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
 
     private LinearLayout linearLayout1, linearLayout2, linearLayout3;
     private Button button1, button2, button3, button_scan;
+    private TextView tvDialogTitle;
 
-
-    // TODO: XUANWU 使用，此处替换
-//    private EditableSequenceViewXW editableSequenceView;
     private EditableSequenceView editableSequenceView;
     private String participantId;
 
@@ -73,7 +76,35 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
         Dialog dialog = new Dialog(requireContext(), getTheme());
 
         dialog.setCanceledOnTouchOutside(false);
+        // 设置对话框窗口背景透明，以便显示圆角卡片
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
         return dialog;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog == null) return;
+        Window window = dialog.getWindow();
+        if (window == null) return;
+
+        // 固定窗口宽度：屏幕宽度的92%，同时不超过600dp
+        DisplayMetrics dm = new DisplayMetrics();
+        WindowManager wm = window.getWindowManager();
+        if (wm != null) {
+            wm.getDefaultDisplay().getMetrics(dm);
+        } else {
+            dm = getResources().getDisplayMetrics();
+        }
+
+        int maxWidthPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 600, getResources().getDisplayMetrics());
+        int targetWidthPx = (int) (dm.widthPixels * 0.92f);
+        int finalWidthPx = Math.min(targetWidthPx, maxWidthPx);
+
+        window.setLayout(finalWidthPx, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
     @SuppressLint("MissingInflatedId")
@@ -92,6 +123,7 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
         button2 = view.findViewById(R.id.button2);
         button3 = view.findViewById(R.id.button3);
         button_scan = view.findViewById(R.id.button_scan);
+        tvDialogTitle = view.findViewById(R.id.tv_dialog_title);
 
         editableSequenceView = view.findViewById(R.id.editableSequenceView);
         // 设置按钮点击事件
@@ -112,27 +144,34 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
                 if (participantId.length() == 22) {
                     MyApp.getInstance().setParticipantID(participantId);
 
-                    // TODO：可以将toolbar设置成被试的ID
-                    // TODO: 理论上这里应该将软键盘隐藏
-                    // 已经连接好蓝牙笔，跳过连接蓝牙笔步骤；表示运行提交一次数据后，再次进入填写id页面
+                    // 已经连接好蓝牙笔，跳过连接蓝牙笔步骤
                     if (MyApp.getInstance().isBLEConnected()){
                         finalConfrim();
                     }else {
-                        // 没有连接好蓝牙笔，进入连接蓝牙笔步骤；表示第一次运行
+                        // 没有连接好蓝牙笔，进入连接蓝牙笔步骤
                         showFragment3();
                     }
                 } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("警告")
-                            .setMessage("检测到被试编号未填写，这会导致无法上传数据，确定执行下一步吗?")
-                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    // 用户点击确认按钮的操作
-                                    showFragment3();
-                                }
-                            })
-                            .setNegativeButton("取消", null)
+                    // #region agent log
+                    String runId = "pre-fix";
+                    try {
+                        // 预检：定位是否存在缺 layout_width/height 的 tag（常见于 mtrl/m3_alert_dialog_title）
+                        com.bupt.myapplication.util.AgentDebugLog.preflightLayout(requireContext(),
+                                com.google.android.material.R.layout.mtrl_alert_dialog_title, runId, "H1");
+                        com.bupt.myapplication.util.AgentDebugLog.preflightLayout(requireContext(),
+                                com.google.android.material.R.layout.m3_alert_dialog_title, runId, "H2");
+                        com.bupt.myapplication.util.AgentDebugLog.preflightLayout(requireContext(),
+                                com.bupt.myapplication.R.layout.mtrl_alert_dialog, runId, "H3");
+                        com.bupt.myapplication.util.AgentDebugLog.preflightLayout(requireContext(),
+                                com.bupt.myapplication.R.layout.m3_alert_dialog, runId, "H3");
+                    } catch (Exception ignored) {}
+                    // #endregion agent log
+
+                    new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("编号长度说明")
+                            .setMessage("被试编号通常为22位。检测到当前输入长度不符，是否继续？\n\n注意：不规范的编号可能导致后期数据分析困难。")
+                            .setPositiveButton("坚持继续", (dialogInterface, i) -> showFragment3())
+                            .setNegativeButton("返回修改", null)
                             .show();
                 }
                 Log.e("ID", participantId);
@@ -177,23 +216,33 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
         linearLayout3.setVisibility(View.GONE);
     }
 
-    private void showFragment(LinearLayout linearLayout) {
+    private void showFragment(LinearLayout linearLayout, String title, Button stepButton) {
         linearLayout1.setVisibility(View.GONE);
         linearLayout2.setVisibility(View.GONE);
         linearLayout3.setVisibility(View.GONE);
+        button1.setVisibility(View.GONE);
+        button2.setVisibility(View.GONE);
+        button3.setVisibility(View.GONE);
+
         linearLayout.setVisibility(View.VISIBLE);
+        if (tvDialogTitle != null) {
+            tvDialogTitle.setText(title);
+        }
+        if (stepButton != null) {
+            stepButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private void showFragment1() {
-        showFragment(linearLayout1);
+        showFragment(linearLayout1, "数字化量表数据采集系统", button1);
     }
 
     private void showFragment2() {
-        showFragment(linearLayout2);
+        showFragment(linearLayout2, "被试编号填写", button2);
     }
 
     private void showFragment3() {
-        showFragment(linearLayout3);
+        showFragment(linearLayout3, "蓝牙笔连接配置", button3);
     }
 
     @Override
@@ -247,32 +296,20 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
         // 提示蓝牙笔有无连接
 
         if (!MyApp.getInstance().isBLEConnected()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("蓝牙笔连接提示")
-                    .setMessage("当前没有连接蓝牙笔，确认进行下一步吗?")
-                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            // 用户点击确认按钮的操作
-                            dismiss();
-
-                        }
-                    })
-                    .setNegativeButton("取消", null)
+            new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("设备未连接")
+                    .setMessage("当前尚未连接蓝牙笔，将无法正常使用系统，是否继续使用")
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setPositiveButton("确认离线使用", (dialogInterface, i) -> dismiss())
+                    .setNegativeButton("去连接", null)
                     .show();
-            //Toast.makeText(requireContext(), "蓝牙未连接，不能进行下一步", Toast.LENGTH_SHORT).show();
         } else if (!isNetworkConnected(getContext())) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("提示")
-                    .setMessage("当前没有连接网络，确认进行下一步吗?")
-                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            // 用户点击确认按钮的操作
-                            dismiss();
-                        }
-                    })
-                    .setNegativeButton("取消", null)
+            new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("网络未连接")
+                    .setMessage("当前网络不可用，数据将无法实时上传，确定继续吗？")
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setPositiveButton("确认继续", (dialogInterface, i) -> dismiss())
+                    .setNegativeButton("去设置网络", null)
                     .show();
         } else {
             dismiss();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="CustomAlertDialogBackground" parent="@android:style/Theme.Dialog">
-        <item name="android:background">@drawable/custom_dialog_background</item>
+        <item name="android:background">@color/white</item>
         <item name="android:lineSpacingExtra">10dp</item>
         <item name="android:windowTitleStyle">@style/DialogWindowTitle.DeviceDefault</item>
         <item name="android:windowBackground">@drawable/actionbar_item_background</item>

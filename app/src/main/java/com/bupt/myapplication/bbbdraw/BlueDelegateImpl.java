@@ -108,13 +108,11 @@ public class BlueDelegateImpl implements BlueDelegate {
 
                 Log.e("PaperChanged", "纸张切换至"+newPaperId);
                 dw.notifyChangeBackGround();
-                StrokeManager.clearCounter();
 
             } else {
 
                 dw.notifyDraw();
                 // 触发抬笔后的判定逻辑
-                // TODO: something caused error, fix this! 2023年12月4日
                 if (endPoint.isStroke_end()){
                     // 当前笔迹信息与纸张和控件id对应，即pageID-gridID-stroke_list
                     List<PointData> strokes = PointManager.getInstance().getLatestStroke();

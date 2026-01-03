@@ -4,5 +4,14 @@
         <item name="android:background">@color/black_overlay</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
-    
+
+    <!-- Dialog 字体按功能统一：Title / Body -->
+    <style name="TextAppearance.MyApplication.DialogTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.MyApplication.DialogBody" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:lineSpacingExtra">2dp</item>
+    </style>
+
 </resources>

@@ -1,12 +1,10 @@
 package com.bupt.myapplication.data;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.bbb.bpen.model.PointData;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -95,11 +93,6 @@ public class PointManager {
                         .filter(point -> point.getPage_id() == currentPageID)
                         .collect(Collectors.toList());
         return currentPointDrawList.size()>0;
-    }
-
-    // 笔迹书写是否结束
-    public boolean isStrokeFinish() {
-        return pointScreenList.get(-1).isStroke_end();
     }
 
     // 返回最后一段轨迹

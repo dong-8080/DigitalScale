@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ===================== -->
+    <!-- Material Design 3 配色（深色） -->
+    <!-- 深色模式下让主色更"亮"，避免按钮/高亮在深背景上对比不足 -->
+    <color name="brand_primary">#8DC097</color>
+    <color name="brand_on_primary">#0B2B1C</color>
+    <!-- 主色容器：改为中性色，避免被用作背景 -->
+    <color name="brand_primary_container">#2A2A2A</color>
+    <color name="brand_on_primary_container">#E1E3DE</color>
+
+    <color name="brand_secondary">#03DAC5</color>
+    <color name="brand_on_secondary">#00332D</color>
+    <!-- 次要色容器：改为中性色，避免被用作背景 -->
+    <color name="brand_secondary_container">#2A2A2A</color>
+    <color name="brand_on_secondary_container">#E1E3DE</color>
+
+    <!-- 深色模式背景：改为纯黑色，避免偏绿 -->
+    <color name="md3_background">#121212</color>
+    <color name="md3_on_background">#E1E3DE</color>
+    <!-- 深色模式表面：改为纯深灰，避免偏绿 -->
+    <color name="md3_surface">#1E1E1E</color>
+    <color name="md3_on_surface">#E1E3DE</color>
+    <!-- 中性表面色：避免深色模式下也出现偏绿底 -->
+    <color name="md3_surface_variant">#2A2A2A</color>
+    <color name="md3_on_surface_variant">#CFCFCF</color>
+    <color name="md3_outline">#5C5C5C</color>
+</resources>
+
+

@@ -1,201 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="8dp"
-    android:orientation="vertical"
-    android:padding="16dp"
+    android:layout_margin="0dp"
+    app:cardCornerRadius="@dimen/md_corner_8"
+    app:cardElevation="@dimen/md_elevation_card"
+    app:strokeWidth="1dp"
+    app:strokeColor="?attr/colorOutline"
+    app:cardBackgroundColor="?attr/colorSurface"
     tools:ignore="MissingDefaultResource">
 
-    <LinearLayout
-
-        android:id="@+id/linear_layout1"
-        android:layout_width="300dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:foreground="?attr/selectableItemBackground"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:background="@color/white"
+        android:minHeight="400dp"
+        android:padding="20dp">
 
-
+        <!-- Header: Common Title -->
         <TextView
+            android:id="@+id/tv_dialog_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="数字化量表系统"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:textColor="?attr/colorOnSurface"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Step 1: Welcome -->
+        <LinearLayout
+            android:id="@+id/linear_layout1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/footer_barrier"
+            app:layout_constraintTop_toBottomOf="@id/tv_dialog_title">
+
+            <ImageView
+                android:id="@+id/imageViewBrain"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:src="@drawable/cover"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="请确认准备好蓝牙笔和量表"
+                android:textAlignment="center"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+        </LinearLayout>
+
+        <!-- Step 2: Participant ID -->
+        <LinearLayout
+            android:id="@+id/linear_layout2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/footer_barrier"
+            app:layout_constraintTop_toBottomOf="@id/tv_dialog_title">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="建议使用平板设备进行数据采集。"
+                android:textColor="?attr/colorError"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:layout_marginBottom="8dp" />
+
+            <com.bupt.myapplication.view.EditableSequenceView
+                android:id="@+id/editableSequenceView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" />
+
+            <!-- 温馨提示卡片 -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                app:cardCornerRadius="@dimen/md_corner_8"
+                app:cardElevation="0dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:text="注意事项：请正确填写编号。如不了解规则，请联系管理员。"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textAlignment="center" />
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- Step 3: Bluetooth Config -->
+        <LinearLayout
+            android:id="@+id/linear_layout3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/footer_barrier"
+            app:layout_constraintTop_toBottomOf="@id/tv_dialog_title">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="请点击连接蓝牙笔"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_scan"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="扫码"
+                    android:textSize="12sp"
+                    app:icon="@android:drawable/ic_menu_rotate" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/footer_barrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="电子量表数据\n  采集系统"
-            android:textColor="@color/black"
-            android:textSize="40sp" />
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="buttonStartTest,button2,button3" />
 
-        <ImageView
-            android:id="@+id/imageViewBrain"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/cover" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="50dp"
-            android:text="请确认已经阅读过说明文档，并准备好蓝牙笔和量表"
-            android:textSize="18sp" />
-
+        <!-- Fixed Footer Buttons：使用填充样式（绿色背景） -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonStartTest"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
             android:text="确认"
-            android:textSize="28sp"
-            app:cornerRadius="15dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="30dp"
-            android:text="修改日期: 2025/7/4"
-            android:textColor="#A9A9A9"
-            android:textSize="12sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linear_layout2"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <TextView
             android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="被试编号填写"
-            android:textColor="@color/black"
-            android:textSize="40sp" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="重要提示"
-            android:textColor="@color/black"
-            android:textSize="40sp" />
-
-        <com.bupt.myapplication.view.EditableSequenceView
-            android:visibility="gone"
-            android:id="@+id/editableSequenceView"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="注意事项：请正确填写编号，Sxx中xx表示站点序号，00xxxx表示站点自定义的序号，20xxxx表示当前年月，如20240524。如不了解被试编号填写规则，请联系管理员确认"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/red"
-            android:text="识别到该系统分辨率异常，本系统在智能手机运行仅能用于系统演示，若要进行数据采集请使用小米平板系统！"/>
+            style="@style/Widget.Material3.Button"
+            app:cornerRadius="@dimen/md_corner_8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button2"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="200dp"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
             android:text="确认"
-            android:textSize="28sp"
-            app:cornerRadius="15dp" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linear_layout3"
-        android:layout_width="300dp"
-        android:layout_height="500dp"
-        android:layout_margin="16dp"
-        android:foreground="?attr/selectableItemBackground"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:paddingBottom="20dp"
-            android:text="蓝牙笔连接配置"
-            android:textColor="@color/black"
-            android:textSize="40sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_scan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="重新扫描"
-                android:textSize="18sp"
-                app:cornerRadius="15dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:paddingTop="2dp"
-                android:paddingBottom="20dp"
-                android:text="扫描到以下蓝牙设备，请点击连接"
-                android:textSize="18sp" />
-
-        </LinearLayout>
-
-
-        <!--一个循环列表，标识扫描的蓝牙笔-->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <!--没找到蓝牙笔的mac地址需要手动填写-->
-        <!--        <TextView-->
-        <!--            android:text="未找到蓝牙笔，手动连接"-->
-        <!--            android:layout_gravity="center_horizontal"-->
-        <!--            android:paddingBottom="20dp"-->
-        <!--            android:textSize="24sp"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"/>-->
-
+            style="@style/Widget.Material3.Button"
+            app:cornerRadius="@dimen/md_corner_8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button3"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
             android:text="开始使用"
-            android:textSize="28sp"
-            app:cornerRadius="15dp" />
+            android:visibility="gone"
+            style="@style/Widget.Material3.Button"
+            app:cornerRadius="@dimen/md_corner_8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    </LinearLayout>
-
-
-</LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -20,22 +20,18 @@
     <string name="toolbar_title">主页</string>
 
     <string name="menu_instruction">使用说明</string>
-    <string name="menu_contact_us">关于我们</string>
+    <string name="menu_contact_us">意见反馈</string>
 
     <string name="menu_history">历史作答记录</string>
     <string name="menu_to_be_upload">待上传</string>
 
     <string name="menu_bluetooth_connect">蓝牙笔连接</string>
-    <string name="menu_toolbox">工具箱</string>
 
     <string name="timer">秒表</string>
     <string name="close_timer">X</string>
     <string name="timer_start">开始</string>
     <string name="timer_stop">停止</string>
     <string name="timer_clear">清零</string>
-    <string name="record">录音</string>
-    <string name="record_start">开始录音</string>
-    <string name="record_stop">停止录音</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="instuction_content0">\t\t\t\t欢迎使用电子量表数据采集系统。为了确保您良好的使用体验，请仔细阅读以下使用指南：</string>

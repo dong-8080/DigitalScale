@@ -18,20 +18,27 @@ import java.util.List;
 public class ReuploadAdapter extends RecyclerView.Adapter<ReuploadAdapter.ViewHolder> {
 
     private List<File> jsonFiles = new ArrayList<>();
+    private final OnItemClickListener onItemClickListener;
 
-    public ReuploadAdapter(List<File> jsonFiles) {
-        Log.e("MyAdapter", "construct");
-        this.jsonFiles = jsonFiles;
+    public interface OnItemClickListener {
+        void onItemClick(File file);
     }
 
-    public void clearData(){
-        this.jsonFiles.clear();
+    public ReuploadAdapter(List<File> jsonFiles, OnItemClickListener listener) {
+        Log.e("MyAdapter", "construct");
+        this.jsonFiles = jsonFiles;
+        this.onItemClickListener = listener;
+    }
+
+    public void setData(List<File> newFiles) {
+        this.jsonFiles = newFiles != null ? newFiles : new ArrayList<>();
+        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ReuploadAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ble_item_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_reupload_file, parent, false);
         return new ViewHolder(view);
     }
 
@@ -40,6 +47,11 @@ public class ReuploadAdapter extends RecyclerView.Adapter<ReuploadAdapter.ViewHo
         File file = jsonFiles.get(position);
         Log.e("MyAdapter", file.getName());
         holder.textView.setText(file.getName());
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(file);
+            }
+        });
     }
 
     @Override
@@ -51,14 +63,7 @@ public class ReuploadAdapter extends RecyclerView.Adapter<ReuploadAdapter.ViewHo
         public TextView textView;
         public ViewHolder(View itemView){
             super(itemView);
-            textView = itemView.findViewById(R.id.textView);
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //TODO:点击一条信息之后的逻辑
-
-                }
-            });
+            textView = itemView.findViewById(R.id.tv_file_name);
         }
     }
 }

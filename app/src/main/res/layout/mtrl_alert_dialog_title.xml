@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  说明：覆盖 Material 库的 mtrl_alert_dialog_title.xml，补齐所有控件的 layout_width/height，
+  修复部分 ROM/系统版本在解析 LayoutParams 时强制要求 XML 明写宽高导致的 InflateException。
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/topPanel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+  <!-- If the client uses a customTitle, it will be added here. -->
+
+  <LinearLayout
+      android:id="@+id/title_template"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      style="?attr/materialAlertDialogTitlePanelStyle">
+
+    <ImageView
+        android:id="@android:id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="ContentDescription"
+        style="?attr/materialAlertDialogTitleIconStyle"/>
+
+    <androidx.appcompat.widget.DialogTitle
+        android:id="@+id/alertTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        style="?attr/materialAlertDialogTitleTextStyle"/>
+  </LinearLayout>
+
+  <android.widget.Space
+      android:id="@+id/titleDividerNoCustom"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/abc_dialog_title_divider_material"
+      android:visibility="gone"/>
+</LinearLayout>
+
