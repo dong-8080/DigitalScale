@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="top"
-            android:background="#1f000000"
+            android:background="?attr/colorOutline"
             android:visibility="gone"
             android:contentDescription="@null"
             app:backgroundTint="?android:attr/colorForeground" />
@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="bottom"
-            android:background="#1f000000"
+            android:background="?attr/colorOutline"
             android:visibility="gone"
             android:contentDescription="@null"
             app:backgroundTint="?android:attr/colorForeground" />

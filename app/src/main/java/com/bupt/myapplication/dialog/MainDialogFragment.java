@@ -126,6 +126,10 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
         tvDialogTitle = view.findViewById(R.id.tv_dialog_title);
 
         editableSequenceView = view.findViewById(R.id.editableSequenceView);
+//        editableSequenceView.setPattern("_____ATHENAxxxxxx_____");
+
+//        editableSequenceView.setPattern("HEAD_Sxx_00xxxx_20xxxx");
+        editableSequenceView.setPattern("__PEA_xx_xxxx_20xxxx__");
         // 设置按钮点击事件
         // 跳转到被试编号填写界面
         button1.setOnClickListener(v -> showFragment2());
@@ -299,7 +303,7 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
             new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
                     .setTitle("设备未连接")
                     .setMessage("当前尚未连接蓝牙笔，将无法正常使用系统，是否继续使用")
-                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setIcon(R.drawable.ic_dialog_info)
                     .setPositiveButton("确认离线使用", (dialogInterface, i) -> dismiss())
                     .setNegativeButton("去连接", null)
                     .show();
@@ -307,7 +311,7 @@ public class MainDialogFragment extends DialogFragment implements BLEScanObserve
             new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
                     .setTitle("网络未连接")
                     .setMessage("当前网络不可用，数据将无法实时上传，确定继续吗？")
-                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setIcon(R.drawable.ic_dialog_info)
                     .setPositiveButton("确认继续", (dialogInterface, i) -> dismiss())
                     .setNegativeButton("去设置网络", null)
                     .show();

@@ -14,4 +14,29 @@
         <item name="android:lineSpacingExtra">2dp</item>
     </style>
 
+    <style name="Widget.MyApplication.EditableSequence.FixedText" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textSize">@dimen/esv_char_text_size</item>
+    </style>
+
+    <style name="Widget.MyApplication.EditableSequence.Input" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/esv_input_background_normal</item>
+        <item name="android:backgroundTint">@null</item>
+        <item name="android:textCursorDrawable">@drawable/esv_cursor</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textColorHint">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textSize">@dimen/esv_cell_text_size</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">@dimen/esv_cell_padding_h</item>
+        <item name="android:paddingEnd">@dimen/esv_cell_padding_h</item>
+        <item name="android:paddingTop">@dimen/esv_cell_padding_v</item>
+        <item name="android:paddingBottom">@dimen/esv_cell_padding_v</item>
+        <item name="android:minWidth">@dimen/esv_cell_min_width</item>
+        <item name="android:minHeight">@dimen/esv_cell_min_height</item>
+    </style>
+
+    <style name="Widget.MyApplication.EditableSequence.ClearButton" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textSize">@dimen/esv_clear_text_size</item>
+    </style>
+
 </resources>

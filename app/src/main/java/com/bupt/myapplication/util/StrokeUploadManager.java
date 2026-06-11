@@ -7,7 +7,6 @@ import static com.bupt.myapplication.util.JsonUtil.saveDataToLocal;
 import android.app.Activity;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 
 import com.bupt.myapplication.MyApp;
 import com.bupt.myapplication.ReuploadCallback;
@@ -130,7 +129,7 @@ public class StrokeUploadManager {
         String jsonStr = gson.toJson(uploadList);
 
         // 直接保存到本地并提示用户
-        new AlertDialog.Builder(activity)
+        new MaterialAlertDialogBuilder(activity)
                 .setTitle("网络不可用")
                 .setMessage("当前网络连接不可用，数据已自动保存到本地。\n\n您可以在网络恢复后，通过\"待上传\"功能重新上传数据。")
                 .setPositiveButton("知道了", (dialogInterface, i) -> {
@@ -157,7 +156,7 @@ public class StrokeUploadManager {
     }
 
     private void showUploadSuccessDialog() {
-        new AlertDialog.Builder(activity)
+        new MaterialAlertDialogBuilder(activity)
                 .setTitle("提交成功")
                 .setMessage("数据已成功提交！现在开始新的评测。")
                 .setPositiveButton("好的", (dialogInterface, i) -> {
@@ -180,7 +179,7 @@ public class StrokeUploadManager {
                 ? "网络连接异常，数据已自动保存到本地。您可以在网络恢复后，通过\"待上传\"功能重新上传。"
                 : "数据上传失败，已自动缓存在本地。您稍后可以在\"待上传\"中重试。";
 
-        new AlertDialog.Builder(activity)
+        new MaterialAlertDialogBuilder(activity)
                 .setTitle("上传失败")
                 .setMessage(message)
                 .setPositiveButton("知道了", (dialogInterface, i) -> {
@@ -209,7 +208,7 @@ public class StrokeUploadManager {
     public void reupload(ReuploadCallback callback) {
         // 先检查网络状态
         if (!NetworkHelper.isNetworkConnected(activity)) {
-            new AlertDialog.Builder(activity)
+            new MaterialAlertDialogBuilder(activity)
                     .setTitle("网络不可用")
                     .setMessage("当前网络连接不可用，无法上传数据。\n\n请检查网络连接后重试。")
                     .setPositiveButton("知道了", null)
@@ -294,7 +293,7 @@ public class StrokeUploadManager {
         if (index >= filenames.size()) {
             String title = isBatch ? "批量上传结束" : "上传完成";
             String message = isBatch ? "所有本地暂存数据已处理完成。" : "该条本地暂存数据已处理完成。";
-            new AlertDialog.Builder(activity)
+            new MaterialAlertDialogBuilder(activity)
                     .setTitle(title)
                     .setMessage(message)
                     .setPositiveButton("好的", (dialog, which) -> callback.onUploadComplete())
@@ -324,7 +323,7 @@ public class StrokeUploadManager {
             bodyToSend = uploadArr.toString();
         } catch (JSONException e) {
             e.printStackTrace();
-            new AlertDialog.Builder(activity)
+            new MaterialAlertDialogBuilder(activity)
                     .setTitle("本地数据格式错误")
                     .setMessage("文件 " + filename + " 内容解析失败。")
                     .setPositiveButton(isBatch ? "跳过并继续下一条" : "关闭", (d, w) -> {
@@ -394,7 +393,7 @@ public class StrokeUploadManager {
             String errorText,
             boolean isBatch
     ) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity)
                 .setTitle("检测到重复提交")
                 .setMessage(errorText + "\n\n是否删除当前这条本地数据？")
                 .setCancelable(false);
@@ -427,7 +426,7 @@ public class StrokeUploadManager {
             ReuploadCallback callback,
             boolean isBatch
     ) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity)
                 .setTitle("上传失败")
                 .setMessage(errorMessage)
                 .setCancelable(false);
@@ -449,4 +448,5 @@ public class StrokeUploadManager {
                 || msg.contains("重复提交");
     }
 }
+
 

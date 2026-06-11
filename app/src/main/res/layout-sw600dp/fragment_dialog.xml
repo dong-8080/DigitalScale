@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="数字化量表数据采集系统"
+            android:textSize="36sp"
             android:textAppearance="?attr/textAppearanceTitleLarge"
             android:textColor="?attr/colorOnSurface"
             android:textStyle="bold"
@@ -88,12 +89,21 @@
                 app:cardCornerRadius="@dimen/md_corner_8"
                 app:cardElevation="0dp">
 
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:lineSpacingMultiplier="1.2"-->
+<!--                    android:padding="24dp"-->
+<!--                    android:text="注意事项：请正确填写编号，Sxx中xx表示站点序号，00xxxx表示站点自定义的序号，20xxxx表示当前年月。如不了解规则，请联系管理员。"-->
+<!--                    android:textAppearance="?attr/textAppearanceBodyMedium"-->
+<!--                    android:textColor="?attr/colorOnSurfaceVariant" />-->
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingMultiplier="1.2"
                     android:padding="24dp"
-                    android:text="注意事项：请正确填写编号，Sxx中xx表示站点序号，00xxxx表示站点自定义的序号，20xxxx表示当前年月。如不了解规则，请联系管理员。"
+                    android:text="请务必准确填写被试编号。编号填写错误将导致测评数据无法归档或历史记录匹配失败。如不清楚编号规则，请在填写前联系管理员确认。"
                     android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="?attr/colorOnSurfaceVariant" />
             </com.google.android.material.card.MaterialCardView>
@@ -121,6 +131,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="24sp"
                     android:text="扫描到以下蓝牙设备，请点击连接"
                     android:textAppearance="?attr/textAppearanceBodySmall"
                     android:textColor="?attr/colorOnSurfaceVariant" />

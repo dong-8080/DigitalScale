@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="top"
-            android:background="?attr/colorControlHighlight"
+            android:background="?attr/colorOutline"
             android:visibility="gone" />
 
         <androidx.core.widget.NestedScrollView
@@ -69,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="bottom"
-            android:background="?attr/colorControlHighlight"
+            android:background="?attr/colorOutline"
             android:visibility="gone" />
 
     </FrameLayout>

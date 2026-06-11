@@ -12,18 +12,13 @@
         <item name="colorSecondaryContainer">@color/brand_secondary_container</item>
         <item name="colorOnSecondaryContainer">@color/brand_on_secondary_container</item>
 
-        <!-- 背景/表面（注意：背景用 android:colorBackground，避免资源链接失败） -->
-        <!-- 强制所有 Material 组件背景为白色 -->
-        <item name="android:colorBackground">@color/md3_background</item>
-        <item name="colorSurface">@color/md3_surface</item>
-        <item name="colorOnSurface">@color/md3_on_surface</item>
-        <item name="colorSurfaceVariant">@color/md3_surface_variant</item>
-        <item name="colorOnSurfaceVariant">@color/md3_on_surface_variant</item>
-        <item name="colorOutline">@color/md3_outline</item>
-        
-        <!-- 强制 Material 组件容器背景为白色，避免使用主色容器 -->
-        <item name="colorPrimaryContainer">@color/md3_surface</item>
-        <item name="colorSecondaryContainer">@color/md3_surface</item>
+        <!-- 背景/表面 -->
+        <item name="android:colorBackground">@color/ui_bg_page</item>
+        <item name="colorSurface">@color/ui_bg_card</item>
+        <item name="colorOnSurface">@color/ui_text_primary</item>
+        <item name="colorSurfaceVariant">@color/ui_bg_card_alt</item>
+        <item name="colorOnSurfaceVariant">@color/ui_text_secondary</item>
+        <item name="colorOutline">@color/ui_border_default</item>
 
         <!-- 统一圆角：8dp（MD3推荐） -->
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MyApplication.Corner8</item>
@@ -52,11 +47,9 @@
     <!-- Material3 AlertDialog 统一排版：标题/正文/按钮字号与字重按功能区分 -->
     <!-- 注意：为避免部分设备上 m3_alert_dialog 运行时 Inflate 崩溃，这里使用稳定的 MaterialComponents AlertDialog 布局 -->
     <style name="ThemeOverlay.MyApplication.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <!-- 弹窗背景：强制白色（不使用主色容器，避免偏绿） -->
+        <!-- 弹窗背景：surface + outline -->
         <item name="android:windowBackground">@drawable/bg_alert_dialog_surface</item>
-        <item name="colorSurface">@color/md3_surface</item>
-        <item name="colorPrimaryContainer">@color/md3_surface</item>
-        <item name="colorSecondaryContainer">@color/md3_surface</item>
+        <item name="colorSurface">@color/ui_bg_dialog</item>
         <item name="materialAlertDialogTitleTextStyle">@style/TextAppearance.MyApplication.DialogTitle</item>
         <item name="materialAlertDialogBodyTextStyle">@style/TextAppearance.MyApplication.DialogBody</item>
     </style>

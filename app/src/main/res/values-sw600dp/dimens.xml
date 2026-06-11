@@ -1,0 +1,11 @@
+<resources>
+    <dimen name="esv_char_text_size">18sp</dimen>
+    <dimen name="esv_cell_text_size">18sp</dimen>
+    <dimen name="esv_clear_text_size">15sp</dimen>
+    <dimen name="esv_cell_min_width">20dp</dimen>
+    <dimen name="esv_cell_min_height">30dp</dimen>
+    <dimen name="esv_cell_padding_h">0dp</dimen>
+    <dimen name="esv_cell_padding_v">0dp</dimen>
+    <dimen name="esv_token_gap">3dp</dimen>
+    <dimen name="esv_group_gap">8dp</dimen>
+</resources>

@@ -15,4 +15,15 @@
     <!-- 阴影层级：卡片 > 按钮 > 普通布局 -->
     <dimen name="md_elevation_card">6dp</dimen>
     <dimen name="md_elevation_button">2dp</dimen>
+
+    <!-- EditableSequenceView -->
+    <dimen name="esv_char_text_size">16sp</dimen>
+    <dimen name="esv_cell_text_size">16sp</dimen>
+    <dimen name="esv_clear_text_size">14sp</dimen>
+    <dimen name="esv_cell_min_width">22dp</dimen>
+    <dimen name="esv_cell_min_height">36dp</dimen>
+    <dimen name="esv_cell_padding_h">2dp</dimen>
+    <dimen name="esv_cell_padding_v">4dp</dimen>
+    <dimen name="esv_token_gap">0dp</dimen>
+    <dimen name="esv_group_gap">6dp</dimen>
 </resources>

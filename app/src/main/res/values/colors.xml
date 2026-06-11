@@ -40,4 +40,16 @@
     <color name="md3_surface_variant">#F5F5F5</color>
     <color name="md3_on_surface_variant">#4B4B4B</color>
     <color name="md3_outline">#D0D5DD</color>
+
+    <!-- UI semantic tokens (day mode baseline) -->
+    <color name="ui_bg_page">@color/md3_background</color>
+    <color name="ui_bg_card">@color/md3_surface</color>
+    <color name="ui_bg_card_alt">@color/md3_surface_variant</color>
+    <color name="ui_bg_dialog">@color/md3_surface</color>
+    <color name="ui_bg_input">@color/md3_surface_variant</color>
+    <color name="ui_text_primary">@color/md3_on_surface</color>
+    <color name="ui_text_secondary">@color/md3_on_surface_variant</color>
+    <color name="ui_border_default">@color/md3_outline</color>
+    <color name="ui_overlay_scrim">#80000000</color>
+    <color name="ui_divider">@color/md3_outline</color>
 </resources>

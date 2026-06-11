@@ -3,4 +3,10 @@
         <attr name="fullscreenBackgroundColor" format="color" />
         <attr name="fullscreenTextColor" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="EditableSequenceView">
+        <attr name="esv_pattern" format="string" />
+        <attr name="esv_slot_char" format="string" />
+        <attr name="esv_show_clear_button" format="boolean" />
+    </declare-styleable>
 </resources>

@@ -18,7 +18,6 @@
     <!--禁止息屏-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-
     <application
         android:name=".MyApp"
         android:allowBackup="true"
